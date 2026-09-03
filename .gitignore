@@ -1,0 +1,21 @@
+﻿# Dépendances Node
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Variables d'environnement
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Gemini/Antigravity (outils internes)
+.gemini/
+
+# Frames animation (trop lourds pour GitHub - on gardera juste les JPG produits)
+'SHOE BOUTIQUE PC ANIMATION SCROLL/'
+'SHOE BOUTIQUE MOBILE ANIMATION SCROLL/'

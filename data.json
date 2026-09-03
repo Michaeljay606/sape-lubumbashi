@@ -1,0 +1,14 @@
+﻿{
+  "whatsapp": "243990000000",
+  "rate": 2850,
+  "products": [
+    { "id": "rose", "name": "Air Sapé — Rose", "price": 89, "img": "assets/products/air-sape-rose.jpg", "badge": "Nouveau", "badgeType": "dark" },
+    { "id": "onyx", "name": "Air Sapé — Onyx", "price": 84, "img": "assets/products/air-sape-onyx.jpg", "badge": "", "badgeType": "" },
+    { "id": "corail", "name": "Air Sapé — Corail", "price": 89, "img": "assets/products/air-sape-corail.jpg", "badge": "", "badgeType": "" },
+    { "id": "azur", "name": "Air Sapé — Azur", "price": 92, "img": "assets/products/air-sape-azur.jpg", "badge": "Édition limitée", "badgeType": "light" },
+    { "id": "emeraude", "name": "Air Sapé — Émeraude", "price": 95, "img": "assets/products/air-sape-emeraude.jpg", "badge": "Exclusif", "badgeType": "dark" },
+    { "id": "sable", "name": "Air Sapé — Sable", "price": 89, "img": "assets/products/air-sape-sable.jpg", "badge": "", "badgeType": "" },
+    { "id": "amethyste", "name": "Air Sapé — Améthyste", "price": 92, "img": "assets/products/air-sape-amethyste.jpg", "badge": "Tendance", "badgeType": "light" },
+    { "id": "ambre", "name": "Air Sapé — Ambre", "price": 89, "img": "assets/products/air-sape-ambre.jpg", "badge": "Populaire", "badgeType": "dark" }
+  ]
+}
