@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <!-- Supabase Cloud SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --font-heading: 'Playfair Display', Georgia, serif;
@@ -132,96 +134,17 @@
       will-change: transform;
     }
 
-    /* Mobile Premium Static Image */
+    /* Mobile Static Premium Hero Image */
     #mobile-hero-image {
-      display: none; /* Hidden by default (PC) */
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center center;
+      object-position: center;
       z-index: 1;
-      pointer-events: none;
-    }
-
-    @media (max-width: 768px), (max-aspect-ratio: 1/1) {
-      /* Hide canvas animation on mobile */
-      #animation-canvas {
-        display: none !important;
-      }
-      /* Show premium static image on mobile */
-      #mobile-hero-image {
-        display: block;
-      }
-      /* On mobile: hero is a normal static block — no scroll pinning */
-      .hero-sticky-wrapper {
-        height: 100vh !important;
-      }
-      .hero-sticky-frame {
-        position: relative !important;
-        top: auto !important;
-      }
-      /* CRITICAL: lock hero text fully visible on mobile — prevent JS fade from hiding it */
-      #hero-section {
-        opacity: 1 !important;
-        transform: none !important;
-        pointer-events: auto !important;
-        transition: none !important;
-        will-change: auto !important;
-      }
-
-      /* ── MOBILE HERO TEXT ENTRANCE ANIMATION (pure CSS, zero JS) ── */
-      @keyframes mobileHeroFadeUp {
-        from {
-          opacity: 0;
-          transform: translateY(22px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      @keyframes mobileHeroFadeIn {
-        from { opacity: 0; }
-        to   { opacity: 1; }
-      }
-
-      /* Image: douce apparition */
-      #mobile-hero-image {
-        animation: mobileHeroFadeIn 0.8s ease forwards;
-      }
-
-      /* Badge pill */
-      #hero-section .badge-pill {
-        animation: mobileHeroFadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
-      }
-
-      /* Titre principal */
-      #hero-section .hero-title {
-        animation: mobileHeroFadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both;
-      }
-
-      /* Description */
-      #hero-section .hero-description {
-        animation: mobileHeroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.42s both;
-      }
-
-      /* Boutons */
-      #hero-section .hero-actions {
-        animation: mobileHeroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.54s both;
-      }
-
-      /* Footer hero (pagination + usps) */
-      #hero-section .hero-footer {
-        animation: mobileHeroFadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.66s both;
-      }
-
-      /* Logo */
-      #hero-section .brand-logo {
-        animation: mobileHeroFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
-      }
+      display: none;
     }
 
     /* Contrast Vignette */
@@ -1088,744 +1011,6 @@
 
 
     /* =========================================================
-       SECTION 3: FOOTER (Desktop & Baseline)
-       ========================================================= */
-    .site-footer {
-      background: #110e12;
-      color: #ffffff;
-      padding: 72px 80px 40px 80px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      position: relative;
-      z-index: 10;
-      font-family: var(--font-body);
-    }
-
-    .footer-main-grid {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr 1fr 1fr;
-      gap: 48px;
-      max-width: 1240px;
-      margin: 0 auto;
-    }
-
-    .footer-brand-col {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .footer-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: #ffffff;
-      margin-bottom: 20px;
-    }
-
-    .footer-logo-circle {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: 1.5px solid rgba(255, 255, 255, 0.75);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-heading);
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    .footer-logo-text {
-      font-family: var(--font-heading);
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: 4px;
-    }
-
-    .footer-tagline {
-      font-size: 13.5px;
-      line-height: 1.55;
-      color: rgba(255, 255, 255, 0.72);
-      margin-bottom: 24px;
-      max-width: 300px;
-    }
-
-    .footer-newsletter-label {
-      font-size: 12.5px;
-      color: rgba(255, 255, 255, 0.85);
-      margin-bottom: 12px;
-      font-weight: 500;
-    }
-
-    .footer-newsletter-form {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-      max-width: 380px;
-    }
-
-    .footer-newsletter-input {
-      flex: 1;
-      background: #181418;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      border-radius: 100px;
-      padding: 12px 20px;
-      color: #ffffff;
-      font-size: 13px;
-      font-family: var(--font-body);
-      outline: none;
-      transition: border-color 0.2s, background 0.2s;
-    }
-
-    .footer-newsletter-input:focus {
-      border-color: rgba(255, 255, 255, 0.6);
-      background: #201a20;
-    }
-
-    .footer-newsletter-input::placeholder {
-      color: rgba(255, 255, 255, 0.45);
-    }
-
-    .footer-newsletter-btn {
-      background: #fbf7f8;
-      color: #140f13;
-      border: none;
-      border-radius: 100px;
-      padding: 12px 22px;
-      font-size: 13px;
-      font-weight: 700;
-      font-family: var(--font-body);
-      cursor: pointer;
-      white-space: nowrap;
-      transition: transform 0.2s, background 0.2s;
-    }
-
-    .footer-newsletter-btn:hover {
-      background: #ffffff;
-      transform: translateY(-1px);
-    }
-
-    .footer-nav-col {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .footer-col-title {
-      font-size: 13.5px;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 18px;
-      letter-spacing: 0.3px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .footer-col-chevron {
-      display: none;
-    }
-
-    .footer-links-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 11px;
-    }
-
-    .footer-link {
-      color: rgba(255, 255, 255, 0.65);
-      text-decoration: none;
-      font-size: 13px;
-      transition: color 0.2s;
-    }
-
-    .footer-link:hover {
-      color: #ffffff;
-    }
-
-    .footer-bottom-bar {
-      max-width: 1240px;
-      margin: 64px auto 0 auto;
-      padding-top: 26px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.55);
-    }
-
-    .footer-bottom-left {
-      white-space: nowrap;
-    }
-
-    .footer-bottom-center {
-      color: rgba(255, 255, 255, 0.65);
-    }
-
-    .footer-social-links {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .footer-social-circle {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255, 255, 255, 0.85);
-      text-decoration: none;
-      font-size: 11px;
-      font-weight: 700;
-      transition: border-color 0.2s, background 0.2s, color 0.2s;
-    }
-
-    .footer-social-circle:hover {
-      border-color: #ffffff;
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-
-    /* =========================================================
-       CURRENCY SWITCHER (USD & CDF)
-       ========================================================= */
-    .currency-switcher-wrap {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .currency-switcher {
-      display: inline-flex;
-      background: rgba(0, 0, 0, 0.06);
-      padding: 3px;
-      border-radius: 100px;
-      border: 1px solid rgba(0, 0, 0, 0.09);
-    }
-
-    .currency-pill {
-      border: none;
-      background: none;
-      padding: 6px 14px;
-      border-radius: 100px;
-      font-size: 12.5px;
-      font-weight: 700;
-      color: var(--text-dark-muted);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-family: var(--font-body);
-    }
-
-    .currency-pill.active {
-      background: var(--text-dark);
-      color: #ffffff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    }
-
-    /* Admin Button in Footer */
-    .admin-open-btn {
-      background: none;
-      border: 1px dashed rgba(255, 255, 255, 0.28);
-      color: rgba(255, 255, 255, 0.65);
-      border-radius: 50px;
-      padding: 4px 12px;
-      font-size: 11px;
-      font-family: var(--font-body);
-      cursor: pointer;
-      margin-left: 12px;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .admin-open-btn:hover {
-      border-color: #ffffff;
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    /* =========================================================
-       ADMIN MODALS (LOGIN & DASHBOARD)
-       ========================================================= */
-    .admin-modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(10, 8, 11, 0.82);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .admin-modal-overlay.open {
-      display: flex;
-    }
-
-    /* Login Modal */
-    .admin-login-box {
-      background: #191418;
-      color: #ffffff;
-      width: 100%;
-      max-width: 380px;
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      padding: 32px 28px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
-      font-family: var(--font-body);
-      text-align: center;
-    }
-
-    .admin-login-icon {
-      font-size: 36px;
-      margin-bottom: 12px;
-    }
-
-    .admin-login-box h3 {
-      font-family: var(--font-heading);
-      font-size: 24px;
-      margin-bottom: 8px;
-    }
-
-    .admin-login-box p {
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.65);
-      margin-bottom: 22px;
-    }
-
-    .admin-input-group {
-      margin-bottom: 18px;
-      text-align: left;
-    }
-
-    .admin-input-label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.8);
-      margin-bottom: 6px;
-    }
-
-    .admin-input {
-      width: 100%;
-      background: #241e23;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-      padding: 12px 14px;
-      color: #ffffff;
-      font-size: 14px;
-      font-family: var(--font-body);
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .admin-input:focus {
-      border-color: rgba(255, 255, 255, 0.6);
-    }
-
-    .admin-login-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 24px;
-    }
-
-    .btn-admin-primary {
-      flex: 1;
-      background: #ffffff;
-      color: #140f13;
-      border: none;
-      border-radius: 100px;
-      padding: 12px 20px;
-      font-size: 13.5px;
-      font-weight: 700;
-      font-family: var(--font-body);
-      cursor: pointer;
-      transition: transform 0.2s, background 0.2s;
-    }
-
-    .btn-admin-primary:hover {
-      background: #f0e8eb;
-      transform: translateY(-1px);
-    }
-
-    .btn-admin-secondary {
-      background: none;
-      color: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 100px;
-      padding: 12px 20px;
-      font-size: 13.5px;
-      font-weight: 600;
-      font-family: var(--font-body);
-      cursor: pointer;
-    }
-
-    .btn-admin-secondary:hover {
-      color: #ffffff;
-      border-color: rgba(255, 255, 255, 0.4);
-    }
-
-    /* Dashboard Box */
-    .admin-dashboard-box {
-      background: #141014;
-      color: #ffffff;
-      width: 100%;
-      max-width: 980px;
-      max-height: 92vh;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7);
-      font-family: var(--font-body);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .admin-dash-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 28px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      background: #1c171b;
-    }
-
-    .admin-dash-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .admin-dash-title h2 {
-      font-family: var(--font-heading);
-      font-size: 20px;
-      letter-spacing: 0.5px;
-    }
-
-    .admin-badge-status {
-      background: #25D366;
-      color: #0b2e15;
-      font-size: 10.5px;
-      font-weight: 800;
-      padding: 3px 9px;
-      border-radius: 50px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    .admin-dash-close {
-      background: none;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: rgba(255, 255, 255, 0.8);
-      border-radius: 50%;
-      width: 34px;
-      height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.2s;
-    }
-
-    .admin-dash-close:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
-      border-color: #ffffff;
-    }
-
-    /* Tabs Bar */
-    .admin-tabs-bar {
-      display: flex;
-      gap: 10px;
-      padding: 0 28px;
-      background: #181317;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .admin-tab {
-      background: none;
-      border: none;
-      border-bottom: 2.5px solid transparent;
-      padding: 14px 18px;
-      font-size: 13.5px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.6);
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: var(--font-body);
-    }
-
-    .admin-tab.active {
-      color: #ffffff;
-      border-bottom-color: #25D366;
-    }
-
-    /* Tab Content Area */
-    .admin-tab-body {
-      padding: 26px 28px;
-      overflow-y: auto;
-      flex: 1;
-    }
-
-    .admin-top-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 22px;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .btn-add-item {
-      background: #25D366;
-      color: #0b2e15;
-      border: none;
-      border-radius: 100px;
-      padding: 10px 20px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: var(--font-body);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: transform 0.2s, background 0.2s;
-    }
-
-    .btn-add-item:hover {
-      background: #2be873;
-      transform: translateY(-1px);
-    }
-
-    .btn-reset-default {
-      background: none;
-      color: rgba(255, 255, 255, 0.6);
-      border: 1px dashed rgba(255, 255, 255, 0.25);
-      border-radius: 100px;
-      padding: 8px 16px;
-      font-size: 12px;
-      cursor: pointer;
-      font-family: var(--font-body);
-    }
-
-    .btn-reset-default:hover {
-      color: #ff7777;
-      border-color: #ff7777;
-    }
-
-    /* Product Edit/Add Card */
-    .admin-form-card {
-      background: #1f191e;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 14px;
-      padding: 24px;
-      margin-bottom: 26px;
-      display: none;
-    }
-
-    .admin-form-card.open {
-      display: block;
-    }
-
-    .admin-form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
-
-    .admin-image-upload-box {
-      border: 2px dashed rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
-      padding: 16px;
-      text-align: center;
-      cursor: pointer;
-      background: #171316;
-      transition: border-color 0.2s;
-      position: relative;
-    }
-
-    .admin-image-upload-box:hover {
-      border-color: rgba(255, 255, 255, 0.5);
-    }
-
-    .admin-img-preview {
-      width: 100px;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin: 0 auto 10px auto;
-      display: block;
-      background: #252024;
-    }
-
-    /* Products Table in Admin */
-    .admin-products-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .admin-product-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #1b161a;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 12px 18px;
-      gap: 16px;
-      transition: background 0.2s;
-    }
-
-    .admin-product-row:hover {
-      background: #221c21;
-    }
-
-    .admin-prod-thumb {
-      width: 52px;
-      height: 52px;
-      object-fit: cover;
-      border-radius: 8px;
-      background: #2b2529;
-    }
-
-    .admin-prod-meta {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .admin-prod-name {
-      font-size: 14.5px;
-      font-weight: 600;
-      color: #ffffff;
-    }
-
-    .admin-prod-prices {
-      font-size: 12.5px;
-      color: rgba(255, 255, 255, 0.7);
-      display: flex;
-      gap: 10px;
-    }
-
-    .admin-prod-prices strong {
-      color: #25D366;
-    }
-
-    .admin-row-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn-action-top {
-      background: rgba(37, 211, 102, 0.15);
-      border: 1px solid rgba(37, 211, 102, 0.35);
-      color: #25D366;
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 12px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-
-    .btn-action-top:hover {
-      background: #25D366;
-      color: #0b2e15;
-    }
-
-    .btn-action-edit {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #ffffff;
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 12px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .btn-action-edit:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .btn-action-delete {
-      background: rgba(231, 76, 60, 0.15);
-      border: 1px solid rgba(231, 76, 60, 0.3);
-      color: #ff6b6b;
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 12px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .btn-action-delete:hover {
-      background: rgba(231, 76, 60, 0.3);
-    }
-
-    /* Settings Panel */
-    .admin-settings-card {
-      background: #1b161a;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 14px;
-      padding: 24px;
-      margin-bottom: 20px;
-    }
-
-    .admin-settings-card h4 {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: #ffffff;
-    }
-
-    .admin-settings-card p {
-      font-size: 12.5px;
-      color: rgba(255, 255, 255, 0.6);
-      margin-bottom: 16px;
-      line-height: 1.45;
-    }
-
-    /* Notification Toast */
-    .admin-toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: #25D366;
-      color: #0c3318;
-      font-weight: 700;
-      font-size: 13.5px;
-      padding: 12px 24px;
-      border-radius: 100px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      z-index: 99999;
-      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-      pointer-events: none;
-    }
-
-    .admin-toast.show {
-      transform: translateX(-50%) translateY(0);
-    }
-
-
-    /* =========================================================
        RESPONSIVE ADAPTATION (MOBILE & TABLET)
        ========================================================= */
     @media (max-width: 768px), (max-aspect-ratio: 1/1) {
@@ -1841,7 +1026,25 @@
       }
 
       .hero-sticky-wrapper {
-        height: 140vh; /* Shorter track for fast mobile thumb scroll */
+        height: 100vh !important;
+      }
+
+      .hero-sticky-frame {
+        position: relative !important;
+      }
+
+      #animation-canvas {
+        display: none !important;
+      }
+
+      #mobile-hero-image {
+        display: block !important;
+      }
+
+      #hero-section {
+        opacity: 1 !important;
+        transform: none !important;
+        pointer-events: auto !important;
       }
 
       .hero-container {
@@ -1963,52 +1166,8 @@
       }
 
       .collection-header-row {
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-bottom: 18px;
-      }
-
-      .currency-switcher-wrap {
-        order: 3;
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-        margin-top: 4px;
-      }
-
-      .admin-form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .admin-dashboard-box {
-        width: 96vw;
-        max-height: 94vh;
-        border-radius: 16px;
-      }
-
-      .admin-dash-header {
-        padding: 16px 20px;
-      }
-
-      .admin-tabs-bar {
-        padding: 0 16px;
-      }
-
-      .admin-tab-body {
-        padding: 18px 16px;
-      }
-
-      .admin-product-row {
-        flex-direction: column;
         align-items: flex-start;
-        gap: 12px;
-      }
-
-      .admin-row-actions {
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
+        margin-bottom: 18px;
       }
 
       .collection-main-title {
@@ -2063,110 +1222,556 @@
       .cart-drawer {
         width: 100vw;
       }
+    }
 
-      /* Footer Mobile Adaptation */
-      .site-footer {
-        padding: 48px 20px 36px 20px;
-      }
+    /* =========================================================
+       FOOTER STYLES (MATCHING USER SCREENSHOTS)
+       ========================================================= */
+    .site-footer {
+      background: #110e12;
+      color: #ffffff;
+      padding: 60px 24px 30px;
+      position: relative;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-family: var(--font-body);
+    }
 
-      .footer-main-grid {
-        display: flex;
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand {
+      flex: 1;
+      max-width: 360px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .footer-tagline {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 22px;
+    }
+
+    .footer-newsletter-row {
+      display: flex;
+      gap: 8px;
+      max-width: 320px;
+    }
+
+    .footer-newsletter-input {
+      flex: 1;
+      padding: 10px 16px;
+      border-radius: 100px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 13px;
+      outline: none;
+    }
+
+    .footer-newsletter-input:focus {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .footer-newsletter-btn {
+      padding: 10px 20px;
+      border-radius: 100px;
+      border: none;
+      background: #ffffff;
+      color: #110e12;
+      font-weight: 700;
+      font-size: 13px;
+      font-family: var(--font-body);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .footer-newsletter-btn:hover {
+      background: #f0e6e8;
+      transform: translateY(-1px);
+    }
+
+    .footer-cols {
+      display: flex;
+      gap: 60px;
+    }
+
+    .footer-col {
+      min-width: 120px;
+    }
+
+    .footer-col-header {
+      margin-bottom: 16px;
+    }
+
+    .footer-col-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-col-chevron {
+      display: none;
+    }
+
+    .footer-col-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col-links a {
+      color: rgba(255, 255, 255, 0.65);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+
+    .footer-col-links a:hover {
+      color: #ffffff;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 10px;
+    }
+
+    .social-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+
+    .social-badge:hover {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    @media (max-width: 768px) {
+      .footer-top {
         flex-direction: column;
-        gap: 28px;
+        gap: 32px;
       }
-
-      .footer-brand-col {
-        width: 100%;
-      }
-
-      .footer-logo {
-        margin-bottom: 16px;
-      }
-
-      .footer-tagline {
-        font-size: 13.5px;
-        margin-bottom: 20px;
+      .footer-newsletter-row {
         max-width: 100%;
       }
-
-      .footer-newsletter-label {
-        font-size: 12.5px;
-        margin-bottom: 10px;
-      }
-
-      .footer-newsletter-form {
-        flex-direction: column;
-        max-width: 100%;
-        gap: 10px;
-      }
-
-      .footer-newsletter-input {
-        width: 100%;
-        padding: 13px 20px;
-        font-size: 13.5px;
-      }
-
       .footer-newsletter-btn {
         width: 100%;
-        padding: 13px 20px;
-        font-size: 14px;
+        margin-top: 8px;
       }
-
-      /* Mobile Accordion Navs */
-      .footer-nav-col {
+      .footer-newsletter-row {
+        flex-direction: column;
+      }
+      .footer-cols {
+        flex-direction: column;
+        gap: 0;
+      }
+      .footer-col {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .footer-col:last-child {
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        padding-bottom: 14px;
       }
-
-      .footer-col-title {
-        cursor: pointer;
-        user-select: none;
-        padding: 4px 0;
-        font-size: 14.5px;
+      .footer-col-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
         margin-bottom: 0;
+        cursor: pointer;
       }
-
       .footer-col-chevron {
         display: inline-block;
-        font-size: 13px;
-        font-weight: 700;
-        color: rgba(255, 255, 255, 0.8);
-        transition: transform 0.2s ease;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
       }
-
-      .footer-links-list {
+      .footer-col-links {
         display: none;
-        padding-top: 14px;
-        gap: 11px;
+        padding-bottom: 16px;
       }
-
-      .footer-nav-col.open .footer-links-list {
+      .footer-col.open .footer-col-links {
         display: flex;
       }
-
-      /* Bottom Bar Mobile */
-      .footer-bottom-bar {
-        margin-top: 36px;
-        padding-top: 24px;
+      .footer-bottom {
         flex-direction: column;
         align-items: center;
         text-align: center;
-        gap: 16px;
+        gap: 14px;
       }
+    }
 
-      .footer-bottom-center {
-        order: 1;
-        font-size: 12px;
+    #admin-toast.show {
+      opacity: 1 !important;
+      transform: translateX(-50%) translateY(0) !important;
+    }
+
+    /* =========================================================
+       QUICK VIEW MODAL & 3-IMAGE GALLERY
+       ========================================================= */
+    .quick-view-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 8000;
+      background: rgba(17, 14, 18, 0.78);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .quick-view-overlay.open {
+      display: flex;
+      opacity: 1;
+    }
+
+    .quick-view-card {
+      background: #ffffff;
+      color: var(--text-dark);
+      width: 100%;
+      max-width: 860px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      display: flex;
+      position: relative;
+      max-height: 90vh;
+      animation: qvScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes qvScaleUp {
+      from { transform: scale(0.94); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .qv-close-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.08);
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      color: #1a1617;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .qv-close-btn:hover {
+      background: #1a1617;
+      color: #ffffff;
+      transform: rotate(90deg);
+    }
+
+    .qv-gallery-col {
+      flex: 1.1;
+      background: #f4ecec;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qv-main-img-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1.05;
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .qv-main-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 0.2s ease, transform 0.3s ease;
+    }
+
+    .qv-main-img:hover {
+      transform: scale(1.04);
+    }
+
+    .qv-thumbnails {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .qv-thumb {
+      width: 68px;
+      height: 68px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      overflow: hidden;
+      cursor: pointer;
+      background: #ffffff;
+      transition: all 0.2s;
+      opacity: 0.65;
+    }
+
+    .qv-thumb:hover {
+      opacity: 0.9;
+    }
+
+    .qv-thumb.active {
+      border-color: #1a1617;
+      opacity: 1;
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .qv-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .qv-info-col {
+      flex: 1;
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+    }
+
+    .qv-badge {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .qv-title {
+      font-family: var(--font-heading);
+      font-size: 26px;
+      font-weight: 700;
+      color: #1a1617;
+      margin-bottom: 8px;
+    }
+
+    .qv-price {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1a1617;
+      font-family: var(--font-body);
+      margin-bottom: 18px;
+    }
+
+    .qv-desc {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #6b6366;
+      margin-bottom: 24px;
+    }
+
+    .qv-size-picker {
+      margin-bottom: 24px;
+    }
+
+    .qv-size-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a1617;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .qv-size-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .qv-size-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      border: 1.5px solid #ddd;
+      background: #ffffff;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #1a1617;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .qv-size-btn:hover {
+      border-color: #1a1617;
+    }
+
+    .qv-size-btn.active {
+      background: #1a1617;
+      color: #ffffff;
+      border-color: #1a1617;
+    }
+
+    .qv-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .qv-btn-add {
+      background: #1a1617;
+      color: #ffffff;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 100px;
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .qv-btn-add:hover {
+      background: #000000;
+      transform: translateY(-2px);
+    }
+
+    .qv-btn-whatsapp {
+      background: var(--whatsapp-green);
+      color: #ffffff;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 100px;
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .qv-btn-whatsapp:hover {
+      background: #20ba5a;
+      transform: translateY(-2px);
+    }
+
+    /* Quick view hover badge on cards */
+    .product-image-box {
+      cursor: pointer;
+    }
+
+    .card-quick-view-hint {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: rgba(17, 14, 18, 0.85);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 11.5px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 3;
+    }
+
+    .product-card:hover .card-quick-view-hint {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .quick-view-card {
+        flex-direction: column;
+        max-height: 88vh;
+        overflow-y: auto;
       }
-
-      .footer-social-links {
-        order: 2;
-        gap: 12px;
+      .qv-gallery-col {
+        padding: 18px;
       }
-
-      .footer-bottom-left {
-        order: 3;
-        font-size: 11.5px;
+      .qv-info-col {
+        padding: 20px 18px;
+      }
+      .qv-title {
+        font-size: 20px;
+      }
+      .qv-price {
+        font-size: 18px;
+      }
+      .qv-thumb {
+        width: 54px;
+        height: 54px;
+      }
+      .card-quick-view-hint {
+        display: none; /* Tap direct on mobile */
       }
     }
   </style>
@@ -2188,16 +1793,11 @@
        ========================================================= -->
   <div class="hero-sticky-wrapper" id="hero-wrapper">
     <div class="hero-sticky-frame">
-      <!-- 360 Shoe Animation Canvas (PC only) -->
+      <!-- 360 Shoe Animation Canvas (PC) -->
       <canvas id="animation-canvas"></canvas>
 
-      <!-- Mobile Premium Static Image (replaces animation on mobile) -->
-      <img id="mobile-hero-image"
-           src="SHOE%20BOUTIQUE%20MOBILE%20ANIMATION%20SCROLL/image%20mobile.jpg"
-           alt="SAPÉ Lubumbashi — Chaussures Premium"
-           draggable="false"
-           fetchpriority="high"
-      />
+      <!-- Mobile Premium Hero Image -->
+      <img id="mobile-hero-image" src="SHOE%20BOUTIQUE%20MOBILE%20ANIMATION%20SCROLL/image%20mobile.jpg" alt="SAPÉ Sneaker Mobile">
 
       <!-- Ambient Contrast Vignette -->
       <div class="viewport-overlay" id="viewport-overlay"></div>
@@ -2300,31 +1900,20 @@
     </header>
 
     <!-- Header Titles Row -->
-    <div class="collection-header-row">
+    <div class="collection-header-row" style="flex-wrap:wrap;gap:12px;">
       <div class="collection-titles">
         <span class="collection-subtitle">Notre sélection</span>
         <h2 class="collection-main-title">Quatre paires, un style</h2>
       </div>
-
-      <!-- Currency Switcher ($ USD / FC CDF) -->
-      <div class="currency-switcher-wrap">
-        <span class="desktop-only" style="font-size: 12.5px; font-weight: 600; color: var(--text-dark-muted);">Devise :</span>
-        <div class="currency-switcher" id="currency-switcher">
-          <button class="currency-pill active" id="curr-btn-usd" onclick="setCurrency('USD')">$ USD</button>
-          <button class="currency-pill" id="curr-btn-cdf" onclick="setCurrency('CDF')">FC CDF</button>
-        </div>
+      <!-- Currency Switcher -->
+      <div id="currency-switcher" style="display:flex;gap:6px;align-items:center;margin-left:auto;">
+        <button id="curr-btn-usd" onclick="setCurrency('USD')" style="padding:6px 16px;border-radius:100px;border:1.5px solid #1a1617;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;background:#1a1617;color:#fff;">$ USD</button>
+        <button id="curr-btn-cdf" onclick="setCurrency('CDF')" style="padding:6px 16px;border-radius:100px;border:1.5px solid #1a1617;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;background:transparent;color:#1a1617;">FC CDF</button>
       </div>
-
-      <a href="#toutes-les-paires" class="collection-view-all">
-        <span class="desktop-only">Voir toute la collection</span>
-        <span class="mobile-only" style="display: none;">Tout voir</span>
-      </a>
     </div>
 
-    <!-- Product Grids Container (Dynamic Rendering) -->
-    <div class="grids-container" id="products-dynamic-container">
-      <!-- Injected via JavaScript from localStorage / default products -->
-    </div>
+    <!-- Dynamic Product Grids Container (injected by JS) -->
+    <div id="products-dynamic-container"></div>
   </section>
 
 
@@ -2332,238 +1921,245 @@
        SECTION 3: FOOTER
        ========================================================= -->
   <footer class="site-footer" id="a-propos">
-    <div class="footer-main-grid">
-      <!-- Brand & Newsletter -->
-      <div class="footer-brand-col">
-        <a href="#" class="footer-logo">
-          <div class="footer-logo-circle">S</div>
-          <span class="footer-logo-text">SAPÉ</span>
-        </a>
-        <p class="footer-tagline">
-          Des paires pensées pour la rue,<br>sapées comme il faut.
-        </p>
-
-        <span class="footer-newsletter-label">Restez informé des nouvelles éditions</span>
-        <form class="footer-newsletter-form" onsubmit="handleNewsletterSubmit(event)">
-          <input type="email" class="footer-newsletter-input" placeholder="Votre adresse e-mail" required>
-          <button type="submit" class="footer-newsletter-btn">S'inscrire</button>
-        </form>
-      </div>
-
-      <!-- Col 1: Boutique (open by default on mobile) -->
-      <div class="footer-nav-col open" id="footer-col-boutique">
-        <div class="footer-col-title" onclick="toggleFooterAccordion('footer-col-boutique')">
-          <span>Boutique</span>
-          <span class="footer-col-chevron">v</span>
-        </div>
-        <ul class="footer-links-list">
-          <li><a href="#collection-section" class="footer-link">Nouveautés</a></li>
-          <li><a href="#collection-section" class="footer-link">Collections</a></li>
-          <li><a href="#collection-section" class="footer-link">Éditions limitées</a></li>
-          <li><a href="#collection-section" class="footer-link">Cartes cadeaux</a></li>
-        </ul>
-      </div>
-
-      <!-- Col 2: Aide (collapsed by default on mobile) -->
-      <div class="footer-nav-col" id="footer-col-aide">
-        <div class="footer-col-title" onclick="toggleFooterAccordion('footer-col-aide')">
-          <span>Aide</span>
-          <span class="footer-col-chevron">&gt;</span>
-        </div>
-        <ul class="footer-links-list">
-          <li><a href="#collection-section" class="footer-link">Livraison</a></li>
-          <li><a href="#collection-section" class="footer-link">Retours &amp; échanges</a></li>
-          <li><a href="#collection-section" class="footer-link">Guide des tailles</a></li>
-          <li><a href="#collection-section" class="footer-link">Contact</a></li>
-        </ul>
-      </div>
-
-      <!-- Col 3: Marque (collapsed by default on mobile) -->
-      <div class="footer-nav-col" id="footer-col-marque">
-        <div class="footer-col-title" onclick="toggleFooterAccordion('footer-col-marque')">
-          <span>Marque</span>
-          <span class="footer-col-chevron">&gt;</span>
-        </div>
-        <ul class="footer-links-list">
-          <li><a href="#collection-section" class="footer-link">À propos</a></li>
-          <li><a href="#collection-section" class="footer-link">Sapeurs &amp; histoires</a></li>
-          <li><a href="#collection-section" class="footer-link">Points de vente</a></li>
-          <li><a href="#collection-section" class="footer-link">Carrières</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Bottom Copyright & Info Bar -->
-    <div class="footer-bottom-bar">
-      <div class="footer-bottom-left">
-        <span class="desktop-only">© 2026 Sapé — Lubumbashi, RDC. Tous droits réservés.</span>
-        <span class="mobile-only" style="display: none;">© 2026 Sapé — Lubumbashi, RDC.</span>
-        <button class="admin-open-btn" onclick="openAdminModal()" title="Espace Administrateur">⚙ Espace Admin</button>
-      </div>
-
-      <div class="footer-bottom-center">
-        <span class="desktop-only">Paiement à la livraison · Mobile money · Carte bancaire</span>
-        <span class="mobile-only" style="display: none;">Paiement à la livraison · Mobile money · Carte</span>
-      </div>
-
-      <div class="footer-social-links">
-        <a href="https://instagram.com" target="_blank" rel="noopener" class="footer-social-circle" aria-label="Instagram">IG</a>
-        <a href="https://tiktok.com" target="_blank" rel="noopener" class="footer-social-circle" aria-label="TikTok">TT</a>
-        <a href="https://facebook.com" target="_blank" rel="noopener" class="footer-social-circle" aria-label="Facebook">FB</a>
-      </div>
-    </div>
-  </footer>
-
-
-  <!-- =========================================================
-       ADMIN LOGIN MODAL
-       ========================================================= -->
-  <div class="admin-modal-overlay" id="admin-login-modal">
-    <div class="admin-login-box">
-      <div class="admin-login-icon">🔐</div>
-      <h3>Espace Admin</h3>
-      <p>Entrez le mot de passe pour gérer les articles, les devises et le numéro WhatsApp.</p>
-      
-      <form onsubmit="handleAdminLogin(event)">
-        <div class="admin-input-group">
-          <label class="admin-input-label" for="admin-pass-input">Mot de passe</label>
-          <input type="password" id="admin-pass-input" class="admin-input" placeholder="••••••••" required autocomplete="current-password">
-        </div>
-        <div class="admin-login-actions">
-          <button type="button" class="btn-admin-secondary" onclick="closeAdminModals()">Annuler</button>
-          <button type="submit" class="btn-admin-primary">Se connecter</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-
-  <!-- =========================================================
-       ADMIN DASHBOARD MODAL
-       ========================================================= -->
-  <div class="admin-modal-overlay" id="admin-dashboard-modal">
-    <div class="admin-dashboard-box">
-      <!-- Header -->
-      <div class="admin-dash-header">
-        <div class="admin-dash-title">
-          <h2>Administration Boutique</h2>
-          <span class="admin-badge-status">Connecté</span>
-        </div>
-        <button class="admin-dash-close" onclick="closeAdminModals()" aria-label="Fermer">✕</button>
-      </div>
-
-      <!-- Tabs Bar -->
-      <div class="admin-tabs-bar">
-        <button class="admin-tab active" id="tab-btn-products" onclick="switchAdminTab('products')">📦 Articles &amp; Paires</button>
-        <button class="admin-tab" id="tab-btn-settings" onclick="switchAdminTab('settings')">⚙ Paramètres (WhatsApp &amp; Taux)</button>
-      </div>
-
-      <!-- Tab 1: Products -->
-      <div class="admin-tab-body" id="admin-tab-products">
-        <div class="admin-top-actions">
-          <button class="btn-add-item" onclick="openAddProductForm()">+ Ajouter une paire</button>
-          <button class="btn-reset-default" onclick="resetToDefaultProducts()">Réinitialiser aux 8 paires de base</button>
-        </div>
-
-        <!-- Add / Edit Form -->
-        <div class="admin-form-card" id="admin-product-form-card">
-          <h3 style="margin-bottom: 16px; font-size: 16px;" id="admin-form-title">Ajouter une nouvelle paire</h3>
-          <form onsubmit="handleSaveProduct(event)">
-            <input type="hidden" id="edit-prod-id" value="">
-            
-            <div class="admin-form-grid">
-              <div>
-                <div class="admin-input-group">
-                  <label class="admin-input-label">Nom de la paire</label>
-                  <input type="text" id="edit-prod-name" class="admin-input" placeholder="ex: Air Sapé — Platine" required>
-                </div>
-
-                <div class="admin-input-group">
-                  <label class="admin-input-label">Prix en Dollars ($ USD)</label>
-                  <input type="number" id="edit-prod-price" class="admin-input" placeholder="ex: 89" min="1" step="1" required>
-                </div>
-
-                <div class="admin-input-group">
-                  <label class="admin-input-label">Badge optionnel</label>
-                  <select id="edit-prod-badge" class="admin-input">
-                    <option value="Nouveau" selected>Nouveau</option>
-                    <option value="Populaire">Populaire</option>
-                    <option value="Exclusif">Exclusif</option>
-                    <option value="Édition limitée">Édition limitée</option>
-                    <option value="Tendance">Tendance</option>
-                    <option value="">Aucun badge</option>
-                  </select>
-                </div>
-
-                <div class="admin-input-group" style="margin-top: 12px;">
-                  <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #25D366; font-size: 13px; font-weight: 700;">
-                    <input type="checkbox" id="edit-prod-top" checked style="accent-color: #25D366; width: 17px; height: 17px;">
-                    ⭐ Mettre en avant tout en tête de boutique
-                  </label>
-                </div>
-              </div>
-
-              <div>
-                <label class="admin-input-label">Photo du produit (fichier local ou lien)</label>
-                <div class="admin-image-upload-box" onclick="document.getElementById('edit-prod-file').click()">
-                  <img src="assets/products/air-sape-rose.jpg" id="edit-prod-preview" class="admin-img-preview" alt="Aperçu">
-                  <span style="font-size: 12px; color: #25D366; font-weight: 600;">📁 Choisir une photo sur l'appareil</span>
-                  <input type="file" id="edit-prod-file" accept="image/*" style="display: none;" onchange="handleProductFileSelect(event)">
-                </div>
-                <div style="margin-top: 10px;">
-                  <label class="admin-input-label">Ou chemin / URL d'image</label>
-                  <input type="text" id="edit-prod-img-url" class="admin-input" placeholder="ex: assets/products/ma-chaussure.jpg" oninput="document.getElementById('edit-prod-preview').src = this.value">
-                </div>
-              </div>
-            </div>
-
-            <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
-              <button type="button" class="btn-admin-secondary" onclick="closeProductForm()">Annuler</button>
-              <button type="submit" class="btn-admin-primary">Enregistrer la paire</button>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo"><div class="logo-circle" style="width:40px;height:40px;font-size:16px;">S</div><span style="font-family:var(--font-heading);font-size:22px;font-weight:700;color:#fff;letter-spacing:1px;">SAPÉ</span></div>
+          <p class="footer-tagline">Des paires pensées pour la rue.<br>Soyez sapés comme il faut.</p>
+          <form class="footer-newsletter" onsubmit="handleNewsletterSubmit(event)">
+            <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:10px;">Restez informé des nouvelles éditions</p>
+            <div class="footer-newsletter-row">
+              <input type="email" class="footer-newsletter-input" placeholder="Votre adresse e-mail" required>
+              <button type="submit" class="footer-newsletter-btn">S'inscrire</button>
             </div>
           </form>
         </div>
+        <div class="footer-cols">
+          <div class="footer-col" id="footer-col-boutique">
+            <div class="footer-col-header" onclick="toggleFooterAccordion('footer-col-boutique')">
+              <span class="footer-col-title">Boutique</span>
+              <span class="footer-col-chevron">v</span>
+            </div>
+            <ul class="footer-col-links">
+              <li><a href="#">Nouveautés</a></li>
+              <li><a href="#">Collections</a></li>
+              <li><a href="#">Éditions limitées</a></li>
+              <li><a href="#">Cartes cadeaux</a></li>
+            </ul>
+          </div>
+          <div class="footer-col" id="footer-col-aide">
+            <div class="footer-col-header" onclick="toggleFooterAccordion('footer-col-aide')">
+              <span class="footer-col-title">Aide</span>
+              <span class="footer-col-chevron">></span>
+            </div>
+            <ul class="footer-col-links">
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Livraison</a></li>
+              <li><a href="#">Retours</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-col" id="footer-col-marque">
+            <div class="footer-col-header" onclick="toggleFooterAccordion('footer-col-marque')">
+              <span class="footer-col-title">Marque</span>
+              <span class="footer-col-chevron">></span>
+            </div>
+            <ul class="footer-col-links">
+              <li><a href="#">Notre histoire</a></li>
+              <li><a href="#">Valeurs</a></li>
+              <li><a href="#">Presse</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2026 SAPÉ — Lubumbashi, RDC</span>
+        <span class="footer-payments">Paiement à la livraison · Mobile money · Carte</span>
+        <div class="footer-socials">
+          <a href="#" class="social-badge">IG</a>
+          <a href="#" class="social-badge">TT</a>
+          <a href="#" class="social-badge">FB</a>
+        </div>
+      </div>
+    </div>
+    <!-- Admin access button -->
+    <button onclick="openAdminLogin()" style="position:absolute;bottom:14px;left:16px;background:none;border:none;color:rgba(255,255,255,0.25);font-size:11px;cursor:pointer;font-family:var(--font-body);">⚙ Espace Admin</button>
+  </footer>
 
-        <!-- Products List -->
-        <div class="admin-products-list" id="admin-products-container">
-          <!-- Rendered via JS -->
+  <!-- Admin Login Modal -->
+  <div id="admin-login-modal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:16px;padding:36px 32px;width:90%;max-width:360px;box-shadow:0 24px 64px rgba(0,0,0,0.3);">
+      <h3 style="font-family:var(--font-heading);font-size:22px;margin-bottom:6px;color:#1a1617;">Espace Admin</h3>
+      <p style="color:#888;font-size:13px;margin-bottom:20px;">Entrez le mot de passe pour accéder au panneau d'administration.</p>
+      <input type="password" id="admin-password-input" placeholder="Mot de passe" style="width:100%;padding:12px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;font-family:var(--font-body);outline:none;margin-bottom:12px;" onkeydown="if(event.key==='Enter')checkAdminPassword()">
+      <div style="display:flex;gap:10px;">
+        <button onclick="checkAdminPassword()" style="flex:1;padding:12px;background:#1a1617;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:var(--font-body);">Accéder</button>
+        <button onclick="closeAdminLogin()" style="flex:1;padding:12px;background:#f0f0f0;color:#333;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-family:var(--font-body);">Annuler</button>
+      </div>
+      <p id="admin-login-error" style="color:#e74c3c;font-size:12px;margin-top:10px;display:none;">Mot de passe incorrect.</p>
+    </div>
+  </div>
+
+  <!-- Quick View Modal (Aperçu Rapide 3 Images) -->
+  <div id="quick-view-modal" class="quick-view-overlay" onclick="handleQuickViewOverlayClick(event)">
+    <div class="quick-view-card" id="quick-view-card">
+      <button class="qv-close-btn" onclick="closeQuickView()" aria-label="Fermer">✕</button>
+      
+      <!-- Left Column: 3-Image Gallery -->
+      <div class="qv-gallery-col">
+        <div class="qv-main-img-wrap">
+          <img id="qv-main-image" class="qv-main-img" src="" alt="Vue détaillée">
+        </div>
+        <div class="qv-thumbnails" id="qv-thumbnails-container">
+          <!-- Thumbnails injected via JS -->
         </div>
       </div>
 
-      <!-- Tab 2: Settings -->
-      <div class="admin-tab-body" id="admin-tab-settings" style="display: none;">
-        <form onsubmit="handleSaveSettings(event)">
-          <!-- WhatsApp Setting -->
-          <div class="admin-settings-card">
-            <h4>📱 Numéro WhatsApp de réception des commandes</h4>
-            <p>Ce numéro recevra automatiquement le récapitulatif détaillé de commande dès qu'un client clique sur "Commander sur WhatsApp".</p>
-            <div class="admin-input-group" style="max-width: 360px;">
-              <label class="admin-input-label">Numéro international (sans le signe + ni espaces)</label>
-              <input type="text" id="setting-whatsapp" class="admin-input" placeholder="ex: 243990000000" required>
+      <!-- Right Column: Product details & Actions -->
+      <div class="qv-info-col">
+        <div>
+          <span id="qv-badge" class="qv-badge badge-dark" style="display:none;"></span>
+          <h2 id="qv-title" class="qv-title">Nom du produit</h2>
+          <div id="qv-price" class="qv-price">89 $</div>
+          <p id="qv-desc" class="qv-desc">Paire originale conçue avec des matériaux haut de gamme. Confort d'amorti supérieur et finitions soignées pour la rue.</p>
+          
+          <!-- Size Selector -->
+          <div class="qv-size-picker">
+            <div class="qv-size-title">
+              <span>Pointure</span>
+              <span id="qv-selected-size-label" style="font-weight:400;color:#777;">Taille 42</span>
+            </div>
+            <div class="qv-size-buttons" id="qv-size-buttons">
+              <!-- Sizes 38-45 injected via JS -->
             </div>
           </div>
+        </div>
 
-          <!-- Exchange Rate Setting -->
-          <div class="admin-settings-card">
-            <h4>💱 Taux de change (Dollar ➔ Franc Congolais)</h4>
-            <p>Indiquez la valeur d'un Dollar américain ($ USD) en Franc Congolais (FC CDF). Les prix dans la boutique seront automatiquement convertis pour les clients qui choisissent la devise FC.</p>
-            <div class="admin-input-group" style="max-width: 360px;">
-              <label class="admin-input-label">1 Dollar ($) = ... Francs Congolais (FC)</label>
-              <input type="number" id="setting-rate" class="admin-input" placeholder="ex: 2850" min="1" step="1" required>
-            </div>
-          </div>
-
-          <div style="display: flex; justify-content: flex-end;">
-            <button type="submit" class="btn-admin-primary">Enregistrer les paramètres</button>
-          </div>
-        </form>
+        <!-- Order / Cart Buttons -->
+        <div class="qv-actions">
+          <button class="qv-btn-add" id="qv-btn-add" onclick="handleQuickViewAddToCart()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            Ajouter au panier
+          </button>
+          <button class="qv-btn-whatsapp" onclick="handleQuickViewWhatsApp()">
+            <svg style="width:18px;height:18px;fill:currentColor;" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            Commander direct sur WhatsApp
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Notification Toast -->
-  <div class="admin-toast" id="admin-toast">Modifications enregistrées avec succès !</div>
+  <!-- Admin Dashboard Modal -->
+  <div id="admin-dashboard-modal" style="display:none;position:fixed;inset:0;z-index:9001;background:rgba(0,0,0,0.6);overflow-y:auto;">
+    <div style="background:#f7f7f7;min-height:100vh;max-width:900px;margin:0 auto;padding:24px 16px 60px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <h2 style="font-family:var(--font-heading);font-size:24px;color:#1a1617;">🛠 Panneau Admin — SAPÉ</h2>
+        <button onclick="closeAdminDashboard()" style="background:#1a1617;color:#fff;border:none;padding:8px 18px;border-radius:100px;cursor:pointer;font-family:var(--font-body);font-weight:700;">✕ Fermer</button>
+      </div>
+      <!-- Tabs -->
+      <div style="display:flex;gap:8px;margin-bottom:20px;border-bottom:2px solid #e0e0e0;padding-bottom:0;">
+        <button id="tab-btn-products" onclick="switchAdminTab('products')" style="padding:10px 20px;border:none;background:none;font-family:var(--font-body);font-weight:700;font-size:14px;cursor:pointer;border-bottom:3px solid #1a1617;color:#1a1617;">Articles & Paires</button>
+        <button id="tab-btn-settings" onclick="switchAdminTab('settings')" style="padding:10px 20px;border:none;background:none;font-family:var(--font-body);font-weight:600;font-size:14px;cursor:pointer;border-bottom:3px solid transparent;color:#888;">Paramètres</button>
+      </div>
+      <!-- Products Tab -->
+      <div id="admin-tab-products">
+        <button onclick="openProductForm(null)" style="margin-bottom:16px;padding:11px 22px;background:#1a1617;color:#fff;border:none;border-radius:100px;font-family:var(--font-body);font-weight:700;cursor:pointer;font-size:14px;">+ Ajouter une nouvelle paire</button>
+        <!-- Product Form Card -->
+        <div id="admin-product-form-card" style="display:none;background:#fff;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+          <h4 id="admin-form-title" style="font-family:var(--font-heading);font-size:18px;margin-bottom:16px;color:#1a1617;">Nouvelle paire</h4>
+          <form onsubmit="handleSaveProduct(event)" style="display:flex;flex-direction:column;gap:14px;">
+            <input type="hidden" id="edit-prod-id">
+            <div>
+              <label style="font-size:13px;font-weight:600;color:#555;display:block;margin-bottom:4px;">Nom du modèle</label>
+              <input type="text" id="edit-prod-name" placeholder="ex: Air Sapé — Rouge" required style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;font-family:var(--font-body);font-size:14px;outline:none;">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div>
+                <label style="font-size:13px;font-weight:600;color:#555;display:block;margin-bottom:4px;">Prix ($ USD)</label>
+                <input type="number" id="edit-prod-price" placeholder="ex: 89" required min="1" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;font-family:var(--font-body);font-size:14px;outline:none;">
+              </div>
+              <div>
+                <label style="font-size:13px;font-weight:600;color:#555;display:block;margin-bottom:4px;">Badge</label>
+                <select id="edit-prod-badge" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;font-family:var(--font-body);font-size:14px;outline:none;">
+                  <option value="">Aucun badge</option>
+                  <option value="Nouveau">Nouveau</option>
+                  <option value="Tendance">Tendance</option>
+                  <option value="Exclusif">Exclusif</option>
+                  <option value="Populaire">Populaire</option>
+                  <option value="Édition limitée">Édition limitée</option>
+                </select>
+              </div>
+            </div>
 
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#555;cursor:pointer;">
+              <input type="checkbox" id="edit-prod-top"> ⭐ Mettre en avant tout en tête de boutique
+            </label>
+
+            <!-- 3 Photo Upload Slots -->
+            <div style="border-top:1px solid #eee;padding-top:14px;">
+              <strong style="font-size:14px;color:#1a1617;display:block;margin-bottom:4px;">📸 Photos de la paire (3 angles pour la galerie) :</strong>
+              <p style="font-size:12px;color:#777;margin-bottom:12px;">Vous pouvez importer 1, 2 ou 3 photos depuis votre appareil ou coller des liens web.</p>
+              
+              <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:14px;">
+                <!-- Slot 1 -->
+                <div style="background:#f9f9f9;border:1px dashed #ccc;border-radius:8px;padding:10px;">
+                  <span style="font-size:12px;font-weight:700;color:#333;display:block;margin-bottom:4px;">Photo 1 (Principale) *</span>
+                  <input type="file" id="edit-prod-file-1" accept="image/*" onchange="handleSingleFileSelect(event, 0)" style="font-size:11px;width:100%;">
+                  <input type="text" id="edit-prod-url-1" placeholder="Ou lien URL image #1" oninput="handleUrlInput(0, this.value)" style="margin-top:6px;padding:6px 8px;border:1px solid #ddd;border-radius:6px;font-size:11px;width:100%;">
+                  <img id="edit-prod-preview-1" src="" alt="Aperçu 1" style="margin-top:8px;width:100%;height:90px;border-radius:6px;object-fit:cover;display:none;background:#eee;">
+                </div>
+
+                <!-- Slot 2 -->
+                <div style="background:#f9f9f9;border:1px dashed #ccc;border-radius:8px;padding:10px;">
+                  <span style="font-size:12px;font-weight:700;color:#333;display:block;margin-bottom:4px;">Photo 2 (Angle / Détail)</span>
+                  <input type="file" id="edit-prod-file-2" accept="image/*" onchange="handleSingleFileSelect(event, 1)" style="font-size:11px;width:100%;">
+                  <input type="text" id="edit-prod-url-2" placeholder="Ou lien URL image #2" oninput="handleUrlInput(1, this.value)" style="margin-top:6px;padding:6px 8px;border:1px solid #ddd;border-radius:6px;font-size:11px;width:100%;">
+                  <img id="edit-prod-preview-2" src="" alt="Aperçu 2" style="margin-top:8px;width:100%;height:90px;border-radius:6px;object-fit:cover;display:none;background:#eee;">
+                </div>
+
+                <!-- Slot 3 -->
+                <div style="background:#f9f9f9;border:1px dashed #ccc;border-radius:8px;padding:10px;">
+                  <span style="font-size:12px;font-weight:700;color:#333;display:block;margin-bottom:4px;">Photo 3 (Portée / Semelle)</span>
+                  <input type="file" id="edit-prod-file-3" accept="image/*" onchange="handleSingleFileSelect(event, 2)" style="font-size:11px;width:100%;">
+                  <input type="text" id="edit-prod-url-3" placeholder="Ou lien URL image #3" oninput="handleUrlInput(2, this.value)" style="margin-top:6px;padding:6px 8px;border:1px solid #ddd;border-radius:6px;font-size:11px;width:100%;">
+                  <img id="edit-prod-preview-3" src="" alt="Aperçu 3" style="margin-top:8px;width:100%;height:90px;border-radius:6px;object-fit:cover;display:none;background:#eee;">
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:10px;margin-top:6px;">
+              <button type="submit" style="flex:1;padding:12px;background:#1a1617;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:var(--font-body);">💾 Enregistrer la paire</button>
+              <button type="button" onclick="closeProductForm()" style="flex:1;padding:12px;background:#eee;color:#333;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-family:var(--font-body);">Annuler</button>
+            </div>
+          </form>
+        </div>
+        <!-- Products List -->
+        <div id="admin-products-list" style="display:flex;flex-direction:column;gap:12px;"></div>
+        <button onclick="resetToDefaultProducts()" style="margin-top:20px;padding:10px 20px;background:#f0f0f0;color:#555;border:none;border-radius:100px;font-family:var(--font-body);font-size:13px;cursor:pointer;">↺ Réinitialiser aux 8 paires de base</button>
+      </div>
+      <!-- Settings Tab -->
+      <div id="admin-tab-settings" style="display:none;">
+        <div style="background:#fff;border-radius:12px;padding:24px;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+          <h4 style="font-family:var(--font-heading);font-size:18px;margin-bottom:20px;color:#1a1617;">⚙️ Paramètres de la boutique</h4>
+          <form onsubmit="handleSaveSettings(event)" style="display:flex;flex-direction:column;gap:14px;">
+            <div>
+              <label style="font-size:13px;font-weight:600;color:#555;display:block;margin-bottom:6px;">📱 Numéro WhatsApp de commande (avec indicatif, sans +)</label>
+              <input type="text" id="setting-whatsapp" placeholder="ex: 243990000000" style="width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:8px;font-family:var(--font-body);font-size:14px;outline:none;">
+            </div>
+            <div>
+              <label style="font-size:13px;font-weight:600;color:#555;display:block;margin-bottom:6px;">💱 Taux de change : 1 USD = ? FC</label>
+              <input type="number" id="setting-rate" placeholder="ex: 2850" min="1" style="width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:8px;font-family:var(--font-body);font-size:14px;outline:none;">
+            </div>
+            <button type="submit" style="padding:13px;background:#1a1617;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:var(--font-body);font-size:15px;">💾 Enregistrer les paramètres</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Toast Notification -->
+  <div id="admin-toast" style="position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1617;color:#fff;padding:12px 24px;border-radius:100px;font-size:14px;font-weight:600;font-family:var(--font-body);z-index:9999;opacity:0;transition:all 0.3s ease;pointer-events:none;white-space:nowrap;"></div>
 
   <!-- =========================================================
        CART DRAWER & SLIDE-OVER
@@ -2649,16 +2245,29 @@
       }
     }
 
+    /* ---------------- SUPABASE CLIENT & CLOUD DATABASE ---------------- */
+    const SUPABASE_URL = 'https://fjmgxlceuxoplcxdswqp.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqbWd4bGNldXhvcGxjeGRzd3FwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4MjQ0OTIsImV4cCI6MjEwNDQwMDQ5Mn0.ukfQCrztzDSlCqF41y6mYLBbyC0ozJ5RkrERfb553Ng';
+    
+    let supabaseClient = null;
+    try {
+      if (window.supabase && typeof window.supabase.createClient === 'function') {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+    } catch (e) {
+      console.warn('Supabase initialization error:', e);
+    }
+
     /* ---------------- DEFAULT PRODUCTS & STORAGE ---------------- */
     const DEFAULT_PRODUCTS = [
-      { id: 'rose', name: 'Air Sapé — Rose', price: 89, img: 'assets/products/air-sape-rose.jpg', badge: 'Nouveau', badgeType: 'dark' },
-      { id: 'onyx', name: 'Air Sapé — Onyx', price: 84, img: 'assets/products/air-sape-onyx.jpg', badge: '', badgeType: '' },
-      { id: 'corail', name: 'Air Sapé — Corail', price: 89, img: 'assets/products/air-sape-corail.jpg', badge: '', badgeType: '' },
-      { id: 'azur', name: 'Air Sapé — Azur', price: 92, img: 'assets/products/air-sape-azur.jpg', badge: 'Édition limitée', badgeType: 'light' },
-      { id: 'emeraude', name: 'Air Sapé — Émeraude', price: 95, img: 'assets/products/air-sape-emeraude.jpg', badge: 'Exclusif', badgeType: 'dark' },
-      { id: 'sable', name: 'Air Sapé — Sable', price: 89, img: 'assets/products/air-sape-sable.jpg', badge: '', badgeType: '' },
-      { id: 'amethyste', name: 'Air Sapé — Améthyste', price: 92, img: 'assets/products/air-sape-amethyste.jpg', badge: 'Tendance', badgeType: 'light' },
-      { id: 'ambre', name: 'Air Sapé — Ambre', price: 89, img: 'assets/products/air-sape-ambre.jpg', badge: 'Populaire', badgeType: 'dark' }
+      { id: 'rose', name: 'Air Sapé — Rose', price: 89, img: 'assets/products/air-sape-rose.jpg', images: ['assets/products/air-sape-rose.jpg', 'assets/products/air-sape-rose.jpg', 'assets/products/air-sape-rose.jpg'], badge: 'Nouveau', badgeType: 'dark', display_order: 80 },
+      { id: 'onyx', name: 'Air Sapé — Onyx', price: 84, img: 'assets/products/air-sape-onyx.jpg', images: ['assets/products/air-sape-onyx.jpg', 'assets/products/air-sape-onyx.jpg', 'assets/products/air-sape-onyx.jpg'], badge: '', badgeType: '', display_order: 70 },
+      { id: 'corail', name: 'Air Sapé — Corail', price: 89, img: 'assets/products/air-sape-corail.jpg', images: ['assets/products/air-sape-corail.jpg', 'assets/products/air-sape-corail.jpg', 'assets/products/air-sape-corail.jpg'], badge: '', badgeType: '', display_order: 60 },
+      { id: 'azur', name: 'Air Sapé — Azur', price: 92, img: 'assets/products/air-sape-azur.jpg', images: ['assets/products/air-sape-azur.jpg', 'assets/products/air-sape-azur.jpg', 'assets/products/air-sape-azur.jpg'], badge: 'Édition limitée', badgeType: 'light', display_order: 50 },
+      { id: 'emeraude', name: 'Air Sapé — Émeraude', price: 95, img: 'assets/products/air-sape-emeraude.jpg', images: ['assets/products/air-sape-emeraude.jpg', 'assets/products/air-sape-emeraude.jpg', 'assets/products/air-sape-emeraude.jpg'], badge: 'Exclusif', badgeType: 'dark', display_order: 40 },
+      { id: 'sable', name: 'Air Sapé — Sable', price: 89, img: 'assets/products/air-sape-sable.jpg', images: ['assets/products/air-sape-sable.jpg', 'assets/products/air-sape-sable.jpg', 'assets/products/air-sape-sable.jpg'], badge: '', badgeType: '', display_order: 30 },
+      { id: 'amethyste', name: 'Air Sapé — Améthyste', price: 92, img: 'assets/products/air-sape-amethyste.jpg', images: ['assets/products/air-sape-amethyste.jpg', 'assets/products/air-sape-amethyste.jpg', 'assets/products/air-sape-amethyste.jpg'], badge: 'Tendance', badgeType: 'light', display_order: 20 },
+      { id: 'ambre', name: 'Air Sapé — Ambre', price: 89, img: 'assets/products/air-sape-ambre.jpg', images: ['assets/products/air-sape-ambre.jpg', 'assets/products/air-sape-ambre.jpg', 'assets/products/air-sape-ambre.jpg'], badge: 'Populaire', badgeType: 'dark', display_order: 10 }
     ];
 
     function getProducts() {
@@ -2672,6 +2281,53 @@
     }
 
     async function syncWithServer() {
+      // 1. Priorité Supabase Cloud
+      if (supabaseClient) {
+        try {
+          const { data: dbProducts, error: prodErr } = await supabaseClient
+            .from('products')
+            .select('*')
+            .order('display_order', { ascending: false })
+            .order('created_at', { ascending: false });
+
+          if (!prodErr && Array.isArray(dbProducts) && dbProducts.length > 0) {
+            const formatted = dbProducts.map(p => ({
+              id: p.id,
+              name: p.name,
+              price: Number(p.price),
+              img: p.img,
+              images: Array.isArray(p.images) ? p.images : (typeof p.images === 'string' ? JSON.parse(p.images) : [p.img]),
+              badge: p.badge || '',
+              badgeType: p.badge_type || 'dark',
+              display_order: p.display_order
+            }));
+            localStorage.setItem('sape_products', JSON.stringify(formatted));
+          }
+
+          const { data: dbSettings, error: stgErr } = await supabaseClient
+            .from('settings')
+            .select('*')
+            .eq('id', 'main')
+            .single();
+
+          if (!stgErr && dbSettings) {
+            if (dbSettings.whatsapp) localStorage.setItem('sape_whatsapp', dbSettings.whatsapp);
+            if (dbSettings.rate) localStorage.setItem('sape_rate', dbSettings.rate);
+          }
+
+          renderProducts();
+          updateCartUI();
+          if (document.getElementById('admin-dashboard-modal')?.style.display === 'block') {
+            renderAdminProducts();
+            loadSettingsInputs();
+          }
+          return;
+        } catch (err) {
+          console.warn('Supabase fetch error, fallback to local:', err);
+        }
+      }
+
+      // 2. Fallback Node.js server API
       try {
         const res = await fetch('/api/data');
         if (res.ok) {
@@ -2679,28 +2335,24 @@
           if (Array.isArray(data.products) && data.products.length > 0) {
             localStorage.setItem('sape_products', JSON.stringify(data.products));
           }
-          if (data.whatsapp) {
-            localStorage.setItem('sape_whatsapp', data.whatsapp);
-          }
-          if (data.rate) {
-            localStorage.setItem('sape_rate', data.rate);
-          }
+          if (data.whatsapp) localStorage.setItem('sape_whatsapp', data.whatsapp);
+          if (data.rate) localStorage.setItem('sape_rate', data.rate);
           renderProducts();
           updateCartUI();
-          if (document.getElementById('admin-dashboard-modal')?.classList.contains('open')) {
+          if (document.getElementById('admin-dashboard-modal')?.style.display === 'block') {
             renderAdminProducts();
             loadSettingsInputs();
           }
         }
       } catch (e) {
-        // Offline / fallback to localStorage
+        // Fallback to local storage cache
       }
     }
 
     async function saveProducts(products) {
       localStorage.setItem('sape_products', JSON.stringify(products));
       renderProducts();
-      if (document.getElementById('admin-dashboard-modal')?.classList.contains('open')) {
+      if (document.getElementById('admin-dashboard-modal')?.style.display === 'block') {
         renderAdminProducts();
       }
       try {
@@ -2709,9 +2361,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ products })
         });
-      } catch (e) {
-        console.warn('Could not sync products with server:', e);
-      }
+      } catch (e) {}
     }
 
     function getWhatsAppPhone() {
@@ -2731,15 +2381,28 @@
     }
 
     async function saveSettingsToServer(phone, rate) {
+      // 1. Supabase Cloud Settings
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('settings').upsert({
+            id: 'main',
+            whatsapp: phone,
+            rate: Number(rate),
+            updated_at: new Date().toISOString()
+          });
+        } catch (e) {
+          console.warn('Supabase save settings error:', e);
+        }
+      }
+
+      // 2. Local Node server backup
       try {
         await fetch('/api/settings', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ whatsapp: phone, rate: rate })
         });
-      } catch (e) {
-        console.warn('Could not sync settings with server:', e);
-      }
+      } catch (e) {}
     }
 
     function getActiveCurrency() {
@@ -2752,15 +2415,22 @@
       const cdfBtn = document.getElementById('curr-btn-cdf');
       if (usdBtn && cdfBtn) {
         if (curr === 'USD') {
-          usdBtn.classList.add('active');
-          cdfBtn.classList.remove('active');
+          usdBtn.style.background = '#1a1617';
+          usdBtn.style.color = '#fff';
+          cdfBtn.style.background = 'transparent';
+          cdfBtn.style.color = '#1a1617';
         } else {
-          cdfBtn.classList.add('active');
-          usdBtn.classList.remove('active');
+          cdfBtn.style.background = '#1a1617';
+          cdfBtn.style.color = '#fff';
+          usdBtn.style.background = 'transparent';
+          usdBtn.style.color = '#1a1617';
         }
       }
       renderProducts();
       updateCartUI();
+      if (activeQuickViewProduct) {
+        updateQuickViewPrice();
+      }
     }
 
     function formatPrice(usdPrice) {
@@ -2775,41 +2445,44 @@
 
     function escapeHtml(str) {
       if (!str) return '';
-      return String(str).replace(/[&<>"']/g, function (m) {
-        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
-      });
+      return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
-    /* ---------------- DYNAMIC PRODUCT RENDERING ---------------- */
+    /* ---------------- RENDER STORE PRODUCTS ---------------- */
     function renderProducts() {
       const container = document.getElementById('products-dynamic-container');
       if (!container) return;
+
       const products = getProducts();
+      if (!products || products.length === 0) {
+        container.innerHTML = '<p style="text-align:center;padding:40px;color:#888;">Aucun produit disponible pour le moment.</p>';
+        return;
+      }
 
       const chunkSize = 4;
-      let html = '';
+      let html = '<div class="grids-container">';
+
       for (let i = 0; i < products.length; i += chunkSize) {
         const chunk = products.slice(i, i + chunkSize);
-        html += `<div class="products-grid">`;
+        html += '<div class="products-grid">';
         chunk.forEach(p => {
-          const badgeHtml = p.badge 
-            ? `<span class="product-badge ${p.badgeType === 'light' ? 'badge-light' : 'badge-dark'}">${escapeHtml(p.badge)}</span>` 
-            : '';
-          const escapedName = escapeHtml(p.name);
-          const safeNameArg = p.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-          const safeImgArg = p.img.replace(/'/g, "\\'");
+          const badgeHtml = p.badge ? `<span class="product-badge badge-${p.badgeType || 'dark'}">${escapeHtml(p.badge)}</span>` : '';
+          const formattedPrice = formatPrice(p.price);
+          const primaryImg = (p.images && p.images.length > 0 && p.images[0]) ? p.images[0] : (p.img || 'assets/products/air-sape-rose.jpg');
+
           html += `
-            <article class="product-card" data-id="${p.id}">
-              <div class="product-image-box">
+            <article class="product-card">
+              <div class="product-image-box" onclick="openQuickView('${escapeHtml(p.id)}')">
                 ${badgeHtml}
-                <img src="${p.img}" alt="${escapedName}" loading="lazy">
+                <img src="${escapeHtml(primaryImg)}" alt="${escapeHtml(p.name)}" loading="lazy">
+                <span class="card-quick-view-hint">👁️ Aperçu rapide (3 photos)</span>
               </div>
               <div class="product-info">
                 <div class="product-info-header">
-                  <h3 class="product-name">${escapedName}</h3>
-                  <span class="product-price">${formatPrice(p.price)}</span>
+                  <h3 class="product-name" onclick="openQuickView('${escapeHtml(p.id)}')" style="cursor:pointer;">${escapeHtml(p.name)}</h3>
+                  <span class="product-price">${formattedPrice}</span>
                 </div>
-                <button class="card-add-cart-btn" onclick="addToCart('${p.id}', '${safeNameArg}', ${p.price}, '${safeImgArg}')">
+                <button class="card-add-cart-btn" onclick="addToCart('${escapeHtml(p.id)}', '${escapeHtml(p.name)}', ${p.price}, '${escapeHtml(primaryImg)}')">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                   Ajouter au panier
                 </button>
@@ -2817,9 +2490,180 @@
             </article>
           `;
         });
-        html += `</div>`;
+        html += '</div>';
       }
+
+      html += '</div>';
       container.innerHTML = html;
+    }
+
+    /* ---------------- QUICK VIEW MODAL (3 IMAGES GALLERY) ---------------- */
+    let activeQuickViewProduct = null;
+    let activeQuickViewSize = 42;
+    let activeQuickViewImages = [];
+
+    function openQuickView(productId) {
+      const products = getProducts();
+      const p = products.find(item => item.id === productId);
+      if (!p) return;
+
+      activeQuickViewProduct = p;
+      activeQuickViewSize = 42;
+
+      // Ensure 3 images array
+      if (Array.isArray(p.images) && p.images.length > 0) {
+        activeQuickViewImages = p.images.filter(img => Boolean(img));
+        if (activeQuickViewImages.length === 0) activeQuickViewImages = [p.img || 'assets/products/air-sape-rose.jpg'];
+      } else {
+        activeQuickViewImages = [p.img || 'assets/products/air-sape-rose.jpg'];
+      }
+
+      // Fill modal details
+      const titleEl = document.getElementById('qv-title');
+      const badgeEl = document.getElementById('qv-badge');
+      if (titleEl) titleEl.textContent = p.name;
+
+      if (badgeEl) {
+        if (p.badge) {
+          badgeEl.textContent = p.badge;
+          badgeEl.className = `qv-badge badge-${p.badgeType || 'dark'}`;
+          badgeEl.style.display = 'inline-block';
+        } else {
+          badgeEl.style.display = 'none';
+        }
+      }
+
+      updateQuickViewPrice();
+
+      // Render 3 Thumbnails
+      const thumbContainer = document.getElementById('qv-thumbnails-container');
+      if (thumbContainer) {
+        thumbContainer.innerHTML = activeQuickViewImages.map((imgSrc, idx) => `
+          <div class="qv-thumb ${idx === 0 ? 'active' : ''}" onclick="setQuickViewImage(${idx})">
+            <img src="${escapeHtml(imgSrc)}" alt="Angle ${idx + 1}">
+          </div>
+        `).join('');
+      }
+
+      // Set Main Image
+      setQuickViewImage(0);
+
+      // Render Size Buttons (38 to 45)
+      const sizeContainer = document.getElementById('qv-size-buttons');
+      if (sizeContainer) {
+        const SIZES = [38, 39, 40, 41, 42, 43, 44, 45];
+        sizeContainer.innerHTML = SIZES.map(sz => `
+          <button class="qv-size-btn ${sz === activeQuickViewSize ? 'active' : ''}" onclick="setQuickViewSize(${sz})">
+            ${sz}
+          </button>
+        `).join('');
+      }
+      updateQuickViewSizeLabel();
+
+      const modal = document.getElementById('quick-view-modal');
+      if (modal) {
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeQuickView() {
+      const modal = document.getElementById('quick-view-modal');
+      if (modal) {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+      activeQuickViewProduct = null;
+    }
+
+    function handleQuickViewOverlayClick(e) {
+      if (e.target.id === 'quick-view-modal') {
+        closeQuickView();
+      }
+    }
+
+    function setQuickViewImage(index) {
+      if (!activeQuickViewImages[index]) return;
+      const mainImg = document.getElementById('qv-main-image');
+      if (mainImg) {
+        mainImg.style.opacity = '0.4';
+        setTimeout(() => {
+          mainImg.src = activeQuickViewImages[index];
+          mainImg.style.opacity = '1';
+        }, 120);
+      }
+
+      const thumbs = document.querySelectorAll('.qv-thumb');
+      thumbs.forEach((th, i) => {
+        if (i === index) th.classList.add('active');
+        else th.classList.remove('active');
+      });
+    }
+
+    function setQuickViewSize(sz) {
+      activeQuickViewSize = parseInt(sz, 10);
+      const btns = document.querySelectorAll('.qv-size-btn');
+      btns.forEach(btn => {
+        if (parseInt(btn.textContent.trim(), 10) === activeQuickViewSize) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      updateQuickViewSizeLabel();
+    }
+
+    function updateQuickViewSizeLabel() {
+      const lbl = document.getElementById('qv-selected-size-label');
+      if (lbl) lbl.textContent = `Pointure ${activeQuickViewSize}`;
+    }
+
+    function updateQuickViewPrice() {
+      if (!activeQuickViewProduct) return;
+      const priceEl = document.getElementById('qv-price');
+      if (priceEl) {
+        priceEl.textContent = formatPrice(activeQuickViewProduct.price);
+      }
+    }
+
+    function handleQuickViewAddToCart() {
+      if (!activeQuickViewProduct) return;
+      const p = activeQuickViewProduct;
+      const primaryImg = (p.images && p.images[0]) ? p.images[0] : (p.img || '');
+      
+      const existing = cart.find(i => i.id === p.id && i.size === activeQuickViewSize);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id: p.id, name: p.name, price: p.price, img: primaryImg, qty: 1, size: activeQuickViewSize });
+      }
+
+      updateCartUI();
+      closeQuickView();
+      toggleCartDrawer(true);
+    }
+
+    function handleQuickViewWhatsApp() {
+      if (!activeQuickViewProduct) return;
+      const p = activeQuickViewProduct;
+      const phone = getWhatsAppPhone();
+      const curr = getActiveCurrency();
+      const formattedPrice = formatPrice(p.price);
+
+      let msg = `Bonjour SAPÉ Lubumbashi ! 👟\nJe souhaite commander cette paire :\n\n`;
+      msg += `• *${p.name}*\n`;
+      msg += `• Pointure : *${activeQuickViewSize}*\n`;
+      msg += `• Prix : *${formattedPrice}*`;
+      if (curr === 'CDF') {
+        msg += ` (${p.price} $)\n`;
+      } else {
+        msg += `\n`;
+      }
+      msg += `• Livraison : Gratuite à Lubumbashi\n\n`;
+      msg += `Pouvez-vous me confirmer la disponibilité pour livraison ? Merci !`;
+
+      const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+      window.open(whatsappUrl, '_blank');
     }
 
     /* ---------------- CART STATE & LOGIC ---------------- */
@@ -2861,7 +2705,7 @@
         if (footer) footer.style.display = 'flex';
         container.innerHTML = cart.map((item, idx) => `
           <div class="cart-item">
-            <img src="${item.img}" alt="${escapeHtml(item.name)}" class="cart-item-img">
+            <img src="${escapeHtml(item.img)}" alt="${escapeHtml(item.name)}" class="cart-item-img">
             <div class="cart-item-details">
               <span class="cart-item-name">${escapeHtml(item.name)}</span>
               <div class="cart-item-meta">
@@ -2940,23 +2784,20 @@
       const custAddress = document.getElementById('cust-address').value.trim() || 'Lubumbashi Centre';
       const totalUSD = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
       const curr = getActiveCurrency();
-      const rate = getExchangeRate();
       const phone = getWhatsAppPhone();
 
       let msg = `Bonjour SAPÉ Lubumbashi ! 👟\nJe souhaite passer une commande :\n\n`;
 
       cart.forEach(item => {
-        const itemTotalFormatted = formatPrice(item.price * item.qty);
-        msg += `• *${item.name}* (Qté: ${item.qty}, Pointure: ${item.size}) — ${itemTotalFormatted}\n`;
+        const itemPriceFormatted = formatPrice(item.price * item.qty);
+        msg += `• *${item.name}* (Qté: ${item.qty}, Pointure: ${item.size}) — ${itemPriceFormatted}\n`;
       });
 
-      const totalCDF = Math.round(totalUSD * rate);
+      const totalFormatted = formatPrice(totalUSD);
+      msg += `\n💰 *Total : ${totalFormatted}*`;
       if (curr === 'CDF') {
-        msg += `\n💰 *Total : ${new Intl.NumberFormat('fr-FR').format(totalCDF)} FC* (${totalUSD} $)`;
-      } else {
-        msg += `\n💰 *Total : ${totalUSD} $* (${new Intl.NumberFormat('fr-FR').format(totalCDF)} FC)`;
+        msg += ` (soit ${totalUSD} $ au taux de ${getExchangeRate()} FC)`;
       }
-
       msg += `\n🚚 *Livraison : Gratuite à Lubumbashi*`;
       msg += `\n👤 *Nom :* ${custName}`;
       msg += `\n📍 *Adresse :* ${custAddress}`;
@@ -2966,34 +2807,50 @@
       window.open(whatsappUrl, '_blank');
     }
 
-    /* ---------------- ADMIN PANEL LOGIC ---------------- */
-    function openAdminModal() {
-      const loginModal = document.getElementById('admin-login-modal');
-      const passInput = document.getElementById('admin-pass-input');
-      if (passInput) passInput.value = '';
-      if (loginModal) loginModal.classList.add('open');
+    /* ---------------- ADMIN PANEL LOGIC (sape2025) ---------------- */
+    let currentEditingImages = [null, null, null];
+
+    function openAdminLogin() {
+      const modal = document.getElementById('admin-login-modal');
+      const err = document.getElementById('admin-login-error');
+      const inp = document.getElementById('admin-password-input');
+      if (modal) modal.style.display = 'flex';
+      if (err) err.style.display = 'none';
+      if (inp) {
+        inp.value = '';
+        setTimeout(() => inp.focus(), 100);
+      }
     }
 
-    function closeAdminModals() {
-      const loginModal = document.getElementById('admin-login-modal');
-      const dashModal = document.getElementById('admin-dashboard-modal');
-      if (loginModal) loginModal.classList.remove('open');
-      if (dashModal) dashModal.classList.remove('open');
-      closeProductForm();
+    function closeAdminLogin() {
+      const modal = document.getElementById('admin-login-modal');
+      if (modal) modal.style.display = 'none';
     }
 
-    function handleAdminLogin(e) {
-      e.preventDefault();
-      const pass = document.getElementById('admin-pass-input').value;
-      if (pass === 'sape2025') {
-        document.getElementById('admin-login-modal').classList.remove('open');
-        document.getElementById('admin-dashboard-modal').classList.add('open');
+    function checkAdminPassword() {
+      const inp = document.getElementById('admin-password-input');
+      const err = document.getElementById('admin-login-error');
+      if (inp && inp.value === 'sape2025') {
+        closeAdminLogin();
+        openAdminDashboard();
+      } else {
+        if (err) err.style.display = 'block';
+      }
+    }
+
+    function openAdminDashboard() {
+      const dash = document.getElementById('admin-dashboard-modal');
+      if (dash) {
+        dash.style.display = 'block';
         switchAdminTab('products');
         renderAdminProducts();
         loadSettingsInputs();
-      } else {
-        alert('Mot de passe incorrect !');
       }
+    }
+
+    function closeAdminDashboard() {
+      const dash = document.getElementById('admin-dashboard-modal');
+      if (dash) dash.style.display = 'none';
     }
 
     function switchAdminTab(tab) {
@@ -3005,13 +2862,17 @@
       if (tab === 'products') {
         tabProducts.style.display = 'block';
         tabSettings.style.display = 'none';
-        btnProducts.classList.add('active');
-        btnSettings.classList.remove('active');
+        btnProducts.style.borderBottom = '3px solid #1a1617';
+        btnProducts.style.color = '#1a1617';
+        btnSettings.style.borderBottom = '3px solid transparent';
+        btnSettings.style.color = '#888';
       } else {
         tabProducts.style.display = 'none';
         tabSettings.style.display = 'block';
-        btnSettings.classList.add('active');
-        btnProducts.classList.remove('active');
+        btnSettings.style.borderBottom = '3px solid #1a1617';
+        btnSettings.style.color = '#1a1617';
+        btnProducts.style.borderBottom = '3px solid transparent';
+        btnProducts.style.color = '#888';
         loadSettingsInputs();
       }
     }
@@ -3021,7 +2882,7 @@
       document.getElementById('setting-rate').value = getExchangeRate();
     }
 
-    function handleSaveSettings(e) {
+    async function handleSaveSettings(e) {
       e.preventDefault();
       const phone = document.getElementById('setting-whatsapp').value.trim().replace(/\D/g, '');
       const rate = parseInt(document.getElementById('setting-rate').value, 10);
@@ -3037,142 +2898,221 @@
 
       saveWhatsAppPhone(phone);
       saveExchangeRate(rate);
-      saveSettingsToServer(phone, rate);
+      await saveSettingsToServer(phone, rate);
       renderProducts();
       updateCartUI();
-      showToast('Paramètres (WhatsApp & Taux) enregistrés et synchronisés sur tous les appareils !');
+      showToast('Paramètres (WhatsApp & Taux) enregistrés et synchronisés sur Supabase !');
     }
 
     function renderAdminProducts() {
-      const container = document.getElementById('admin-products-container');
-      if (!container) return;
+      const list = document.getElementById('admin-products-list');
+      if (!list) return;
+
       const products = getProducts();
-      const rate = getExchangeRate();
+      list.innerHTML = products.map((p, idx) => {
+        const primaryImg = (p.images && p.images[0]) ? p.images[0] : (p.img || 'assets/products/air-sape-rose.jpg');
+        const imgCount = (p.images && p.images.length > 0) ? p.images.filter(Boolean).length : 1;
 
-      if (products.length === 0) {
-        container.innerHTML = '<p style="color: rgba(255,255,255,0.6); text-align: center; padding: 20px;">Aucun article trouvé.</p>';
-        return;
-      }
-
-      container.innerHTML = products.map((p, idx) => {
-        const cdfPrice = Math.round(p.price * rate);
         return `
-          <div class="admin-product-row">
-            <img src="${p.img}" alt="${escapeHtml(p.name)}" class="admin-prod-thumb">
-            <div class="admin-prod-meta">
-              <span class="admin-prod-name">${escapeHtml(p.name)} ${idx === 0 ? '<span style="color: #25D366; font-size: 11px; margin-left: 6px;">[⭐ 1er en avant]</span>' : ''}</span>
-              <div class="admin-prod-prices">
-                <span>Prix: <strong>${p.price} $</strong></span>
-                <span>(${new Intl.NumberFormat('fr-FR').format(cdfPrice)} FC)</span>
-                ${p.badge ? `<span style="background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 20px; font-size: 11px;">${escapeHtml(p.badge)}</span>` : ''}
+          <div style="background:#fff;border-radius:10px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px;box-shadow:0 2px 8px rgba(0,0,0,0.05);flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <img src="${escapeHtml(primaryImg)}" alt="${escapeHtml(p.name)}" style="width:50px;height:50px;border-radius:6px;object-fit:cover;background:#eee;">
+              <div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <strong style="font-size:15px;color:#1a1617;">${escapeHtml(p.name)}</strong>
+                  ${idx === 0 ? '<span style="background:#27ae60;color:#fff;font-size:10px;padding:2px 6px;border-radius:100px;font-weight:700;">⭐ 1er en avant</span>' : ''}
+                  ${p.badge ? `<span style="background:#f0f0f0;font-size:11px;padding:2px 8px;border-radius:4px;">${escapeHtml(p.badge)}</span>` : ''}
+                  <span style="background:#f5ecec;color:#6b6366;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600;">📷 ${imgCount} photo${imgCount > 1 ? 's' : ''}</span>
+                </div>
+                <div style="font-size:13px;color:#777;margin-top:2px;">
+                  ${p.price} $ (${formatPrice(p.price)})
+                </div>
               </div>
             </div>
-            <div class="admin-row-actions">
-              <button class="btn-action-top" onclick="moveToTop('${p.id}')" title="Mettre tout en avant en tête de boutique">⭐ En avant</button>
-              <button class="btn-action-edit" onclick="openEditProductForm('${p.id}')">Modifier</button>
-              <button class="btn-action-delete" onclick="deleteProduct('${p.id}')">Supprimer</button>
+            <div style="display:flex;gap:8px;align-items:center;">
+              ${idx > 0 ? `<button onclick="moveToTop('${escapeHtml(p.id)}')" style="padding:6px 12px;background:#e8f8f0;color:#27ae60;border:1px solid #27ae60;border-radius:6px;font-weight:700;font-size:12px;cursor:pointer;">⭐ En avant</button>` : ''}
+              <button onclick="openProductForm('${escapeHtml(p.id)}')" style="padding:6px 14px;background:#1a1617;color:#fff;border:none;border-radius:6px;font-weight:600;font-size:12px;cursor:pointer;">Modifier</button>
+              <button onclick="deleteProduct('${escapeHtml(p.id)}')" style="padding:6px 14px;background:#ffebee;color:#c62828;border:none;border-radius:6px;font-weight:600;font-size:12px;cursor:pointer;">Supprimer</button>
             </div>
           </div>
         `;
       }).join('');
     }
 
-    function moveToTop(id) {
+    async function moveToTop(id) {
       const products = [...getProducts()];
       const index = products.findIndex(p => p.id === id);
       if (index > 0) {
         const item = products.splice(index, 1)[0];
+        const newOrder = Date.now();
+        item.display_order = newOrder;
         products.unshift(item);
         saveProducts(products);
-        renderAdminProducts();
-        showToast(`"${item.name}" est maintenant placé tout en avant !`);
-      } else if (index === 0) {
-        showToast(`"${products[0].name}" est déjà en avant tout en haut !`);
+
+        // Update Supabase
+        if (supabaseClient) {
+          try {
+            await supabaseClient.from('products').update({ display_order: newOrder }).eq('id', id);
+          } catch (e) {}
+        }
+
+        showToast('Article placé en 1ère position en tête de boutique !');
       }
     }
 
-    let currentEditingFileBase64 = null;
-
-    function openAddProductForm() {
+    function openProductForm(id) {
       const card = document.getElementById('admin-product-form-card');
-      card.classList.add('open');
-      document.getElementById('admin-form-title').textContent = 'Ajouter une nouvelle paire (mise en avant tout en tête)';
-      document.getElementById('edit-prod-id').value = '';
-      document.getElementById('edit-prod-name').value = '';
-      document.getElementById('edit-prod-price').value = '';
-      document.getElementById('edit-prod-badge').value = 'Nouveau';
-      if (document.getElementById('edit-prod-top')) document.getElementById('edit-prod-top').checked = true;
-      document.getElementById('edit-prod-img-url').value = '';
-      document.getElementById('edit-prod-preview').src = 'assets/products/air-sape-rose.jpg';
-      currentEditingFileBase64 = null;
-      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
+      if (!card) return;
+      card.style.display = 'block';
 
-    function openEditProductForm(id) {
+      currentEditingImages = [null, null, null];
+
+      // Reset file inputs and previews
+      for (let i = 1; i <= 3; i++) {
+        const fileInp = document.getElementById(`edit-prod-file-${i}`);
+        const urlInp = document.getElementById(`edit-prod-url-${i}`);
+        const prev = document.getElementById(`edit-prod-preview-${i}`);
+        if (fileInp) fileInp.value = '';
+        if (urlInp) urlInp.value = '';
+        if (prev) { prev.src = ''; prev.style.display = 'none'; }
+      }
+
+      if (!id) {
+        document.getElementById('admin-form-title').textContent = '+ Ajouter une nouvelle paire (3 photos)';
+        document.getElementById('edit-prod-id').value = '';
+        document.getElementById('edit-prod-name').value = '';
+        document.getElementById('edit-prod-price').value = '';
+        document.getElementById('edit-prod-badge').value = 'Nouveau';
+        if (document.getElementById('edit-prod-top')) document.getElementById('edit-prod-top').checked = true;
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return;
+      }
+
       const products = getProducts();
       const p = products.find(item => item.id === id);
       if (!p) return;
 
-      const card = document.getElementById('admin-product-form-card');
-      card.classList.add('open');
       document.getElementById('admin-form-title').textContent = 'Modifier la paire : ' + p.name;
       document.getElementById('edit-prod-id').value = p.id;
       document.getElementById('edit-prod-name').value = p.name;
       document.getElementById('edit-prod-price').value = p.price;
       document.getElementById('edit-prod-badge').value = p.badge || '';
       if (document.getElementById('edit-prod-top')) document.getElementById('edit-prod-top').checked = (products.indexOf(p) === 0);
-      document.getElementById('edit-prod-img-url').value = p.img.startsWith('data:') ? '' : p.img;
-      document.getElementById('edit-prod-preview').src = p.img;
-      currentEditingFileBase64 = p.img.startsWith('data:') ? p.img : null;
+
+      // Populate 3 images
+      const imgs = (Array.isArray(p.images) && p.images.length > 0) ? p.images : [p.img];
+      imgs.forEach((imgSrc, idx) => {
+        if (idx < 3 && imgSrc) {
+          currentEditingImages[idx] = imgSrc;
+          const urlInp = document.getElementById(`edit-prod-url-${idx + 1}`);
+          const prev = document.getElementById(`edit-prod-preview-${idx + 1}`);
+          if (urlInp && !imgSrc.startsWith('data:')) urlInp.value = imgSrc;
+          if (prev) {
+            prev.src = imgSrc;
+            prev.style.display = 'block';
+          }
+        }
+      });
+
       card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     function closeProductForm() {
       const card = document.getElementById('admin-product-form-card');
-      if (card) card.classList.remove('open');
-      currentEditingFileBase64 = null;
+      if (card) card.style.display = 'none';
+      currentEditingImages = [null, null, null];
     }
 
-    function handleProductFileSelect(event) {
+    async function handleSingleFileSelect(event, slotIdx) {
       const file = event.target.files[0];
       if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = async function(evt) {
-        currentEditingFileBase64 = evt.target.result;
-        document.getElementById('edit-prod-preview').src = currentEditingFileBase64;
-        document.getElementById('edit-prod-img-url').value = '';
+      const prev = document.getElementById(`edit-prod-preview-${slotIdx + 1}`);
+      const urlInp = document.getElementById(`edit-prod-url-${slotIdx + 1}`);
 
-        // Auto-upload picture to server folder
-        try {
-          const res = await fetch('/api/upload', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ base64: currentEditingFileBase64 })
-          });
-          if (res.ok) {
-            const data = await res.json();
-            if (data.url) {
-              currentEditingFileBase64 = data.url;
-              document.getElementById('edit-prod-img-url').value = data.url;
-            }
-          }
-        } catch (e) {
-          // Keep base64 fallback
+      // 1. Direct preview with FileReader
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        currentEditingImages[slotIdx] = evt.target.result;
+        if (prev) {
+          prev.src = evt.target.result;
+          prev.style.display = 'block';
         }
       };
       reader.readAsDataURL(file);
+
+      // 2. Upload to Supabase Storage Bucket 'product-images'
+      if (supabaseClient) {
+        try {
+          const ext = file.name.split('.').pop() || 'jpg';
+          const fileName = `sape_${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${ext}`;
+          const { data: uploadData, error: upErr } = await supabaseClient.storage
+            .from('product-images')
+            .upload(fileName, file, { cacheControl: '3600', upsert: true });
+
+          if (!upErr && uploadData) {
+            const { data: publicUrlData } = supabaseClient.storage
+              .from('product-images')
+              .getPublicUrl(fileName);
+
+            if (publicUrlData && publicUrlData.publicUrl) {
+              currentEditingImages[slotIdx] = publicUrlData.publicUrl;
+              if (urlInp) urlInp.value = publicUrlData.publicUrl;
+              return;
+            }
+          }
+        } catch (err) {
+          console.warn('Supabase storage upload error:', err);
+        }
+      }
+
+      // 3. Fallback Node server upload
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ base64: currentEditingImages[slotIdx] })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.url) {
+            currentEditingImages[slotIdx] = data.url;
+            if (urlInp) urlInp.value = data.url;
+          }
+        }
+      } catch (err) {}
     }
 
-    function handleSaveProduct(e) {
+    function handleUrlInput(slotIdx, val) {
+      const cleanVal = val.trim();
+      currentEditingImages[slotIdx] = cleanVal || null;
+      const prev = document.getElementById(`edit-prod-preview-${slotIdx + 1}`);
+      if (prev) {
+        if (cleanVal) {
+          prev.src = cleanVal;
+          prev.style.display = 'block';
+        } else {
+          prev.src = '';
+          prev.style.display = 'none';
+        }
+      }
+    }
+
+    async function handleSaveProduct(e) {
       e.preventDefault();
       const id = document.getElementById('edit-prod-id').value;
       const name = document.getElementById('edit-prod-name').value.trim();
       const price = parseInt(document.getElementById('edit-prod-price').value, 10);
       const badge = document.getElementById('edit-prod-badge').value;
-      const customUrl = document.getElementById('edit-prod-img-url').value.trim();
 
-      const img = currentEditingFileBase64 || customUrl || document.getElementById('edit-prod-preview').src;
+      // Extract 3 images
+      const images = currentEditingImages.filter(img => Boolean(img));
+      if (images.length === 0) {
+        alert('Veuillez au moins ajouter une photo principale pour le produit.');
+        return;
+      }
+
+      const primaryImg = images[0];
 
       if (!name || !price) {
         alert('Veuillez remplir le nom et le prix.');
@@ -3181,48 +3121,105 @@
 
       const products = [...getProducts()];
       const badgeType = (badge === 'Tendance' || badge === 'Édition limitée') ? 'light' : 'dark';
+      const moveToFront = document.getElementById('edit-prod-top')?.checked;
+
+      let targetId = id;
+      let displayOrder = moveToFront ? Date.now() : 0;
 
       if (id) {
         const index = products.findIndex(p => p.id === id);
         if (index !== -1) {
-          const moveToFront = document.getElementById('edit-prod-top')?.checked;
-          const updated = { ...products[index], name, price, badge, badgeType, img, updatedAt: Date.now() };
+          if (!moveToFront && products[index].display_order) {
+            displayOrder = products[index].display_order;
+          }
+          const updated = { ...products[index], name, price, badge, badgeType, img: primaryImg, images: images, display_order: displayOrder, updatedAt: Date.now() };
           products.splice(index, 1);
           if (moveToFront) {
             products.unshift(updated);
           } else {
             products.splice(index, 0, updated);
           }
-          saveProducts(products);
-          showToast('Paire modifiée et synchronisée !');
         }
       } else {
-        const newId = 'prod_' + Date.now();
-        // IMPORTANT: Placer le nouveau produit tout en avant (au début de la liste)
-        products.unshift({ id: newId, name, price, badge: badge || 'Nouveau', badgeType, img, createdAt: Date.now() });
-        saveProducts(products);
-        showToast('Nouvelle paire ajoutée et synchronisée sur tous les appareils !');
+        targetId = 'prod_' + Date.now();
+        displayOrder = Date.now();
+        products.unshift({ id: targetId, name, price, badge: badge || 'Nouveau', badgeType, img: primaryImg, images: images, display_order: displayOrder, createdAt: Date.now() });
+      }
+
+      // 1. Sauvegarde instantanée locale
+      saveProducts(products);
+
+      // 2. Sauvegarde dans la base Supabase Cloud
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('products').upsert({
+            id: targetId,
+            name: name,
+            price: Number(price),
+            img: primaryImg,
+            images: images,
+            badge: badge || '',
+            badge_type: badgeType,
+            display_order: displayOrder,
+            updated_at: new Date().toISOString()
+          });
+          showToast('Article enregistré et synchronisé dans le Cloud Supabase !');
+        } catch (err) {
+          console.warn('Supabase upsert error:', err);
+          showToast('Enregistré localement.');
+        }
+      } else {
+        showToast('Enregistré !');
       }
 
       closeProductForm();
       renderAdminProducts();
     }
 
-    function deleteProduct(id) {
+    async function deleteProduct(id) {
       if (!confirm('Êtes-vous sûr de vouloir supprimer cet article de la boutique ?')) return;
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('products').delete().eq('id', id);
+        } catch (e) {
+          console.warn('Supabase delete error:', e);
+        }
+      }
+
       let products = getProducts();
       products = products.filter(p => p.id !== id);
       saveProducts(products);
       renderAdminProducts();
-      showToast('Article supprimé.');
+      showToast('Article supprimé de la base de données.');
     }
 
-    function resetToDefaultProducts() {
+    async function resetToDefaultProducts() {
       if (!confirm('Voulez-vous réinitialiser le catalogue avec les 8 paires de chaussures de départ ?')) return;
+
+      if (supabaseClient) {
+        try {
+          // Replace Supabase data with base products
+          await supabaseClient.from('products').delete().neq('id', 'null');
+          for (const item of DEFAULT_PRODUCTS) {
+            await supabaseClient.from('products').insert({
+              id: item.id,
+              name: item.name,
+              price: item.price,
+              img: item.img,
+              images: item.images,
+              badge: item.badge,
+              badge_type: item.badgeType,
+              display_order: item.display_order
+            });
+          }
+        } catch (e) {}
+      }
+
       localStorage.removeItem('sape_products');
       saveProducts(DEFAULT_PRODUCTS);
       renderAdminProducts();
-      showToast('Catalogue réinitialisé aux 8 paires de base !');
+      showToast('Catalogue réinitialisé aux 8 paires de base sur Supabase !');
     }
 
     function showToast(msg) {
@@ -3233,11 +3230,22 @@
       setTimeout(() => toast.classList.remove('show'), 3200);
     }
 
-    // Initialize currency and products on startup
+    // Supabase Realtime Subscription (pour voir les changements en direct sans rafraîchir)
+    if (supabaseClient) {
+      try {
+        supabaseClient
+          .channel('public-db-changes')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => syncWithServer())
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'settings' }, () => syncWithServer())
+          .subscribe();
+      } catch (e) {}
+    }
+
+    // Initialize currency, products and server sync on startup
     setCurrency(getActiveCurrency());
     renderProducts();
     updateCartUI();
-    syncWithServer(); // Synchronize instantly with server data.json
+    syncWithServer();
 
 
     /* ---------------- HIGH-PERFORMANCE 360 CANVAS ENGINE ---------------- */
@@ -3392,18 +3400,18 @@
         const newMode = isMobile() ? 'mobile' : 'pc';
         if (newMode !== currentMode) {
           currentMode = newMode;
-          // On mobile, the canvas is hidden — static image is shown instead.
-          // Skip frame preloading entirely to save memory and network.
-          if (newMode !== 'mobile') {
-            preloadSequenceBatched(currentMode);
+          if (currentMode === 'pc') {
+            preloadSequenceBatched('pc');
             lastRenderedIndex = -1;
             renderFrame(Math.round(currentProgress * (TOTAL_FRAMES - 1)), true);
+            requestAnimationFrame(animationLoop);
           }
         }
       }
 
       function updateHeroFade(progress) {
-        const fadeThreshold = isMobile() ? 0.35 : 0.30;
+        if (isMobile()) return;
+        const fadeThreshold = 0.30;
         const heroOpacity = Math.max(0, 1 - (progress / fadeThreshold));
         const heroTranslateY = -progress * 40;
 
@@ -3421,8 +3429,8 @@
       }
 
       function animationLoop() {
-        // Fast, responsive mobile lerp damping factor
-        const lerpFactor = isMobile() ? 0.35 : 0.18;
+        if (isMobile()) return;
+        const lerpFactor = 0.18;
         const diff = targetProgress - currentProgress;
 
         if (Math.abs(diff) > 0.0005) {
@@ -3442,12 +3450,7 @@
         requestAnimationFrame(animationLoop);
       }
 
-      // On mobile: static image only — zero JS running, zero listeners, zero RAF
-      if (isMobile()) {
-        return; // Exit immediately — hero is a pure static image on mobile
-      }
-
-      // Passive scroll listeners for 120Hz/60Hz zero-lag touch tracking (PC only)
+      // Passive scroll listeners for 120Hz/60Hz zero-lag touch tracking
       window.addEventListener('scroll', updateScrollProgress, { passive: true });
       window.addEventListener('touchmove', updateScrollProgress, { passive: true });
       window.addEventListener('resize', () => {
