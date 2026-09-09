@@ -453,6 +453,107 @@
       100% { opacity: 0; transform: translate(-50%, 0); }
     }
 
+    /* =========================================================
+       PREMIUM TYPOGRAPHY & MICRO-ANIMATIONS
+       ========================================================= */
+    @keyframes heroTitleReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(24px) scale(0.985);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes heroFadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes badgeGlowPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+        border-color: rgba(255, 255, 255, 0.45);
+      }
+      50% {
+        box-shadow: 0 0 16px rgba(255, 255, 255, 0.28);
+        border-color: rgba(255, 255, 255, 0.85);
+      }
+    }
+
+    .badge-pill {
+      animation: heroFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .badge-pill:hover {
+      animation: badgeGlowPulse 2s infinite ease-in-out;
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .hero-title {
+      animation: heroTitleReveal 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+      letter-spacing: -0.5px;
+      transition: letter-spacing 0.4s ease;
+    }
+
+    .hero-description {
+      animation: heroFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.38s both;
+    }
+
+    .hero-actions {
+      animation: heroFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.52s both;
+    }
+
+    .hero-footer {
+      animation: heroFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.65s both;
+    }
+
+    /* Scroll Reveal Elements (0ms lag, GPU composited) */
+    .reveal-elem {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-elem.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Product Card Staggered Reveal */
+    .product-card {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.65s ease, box-shadow 0.25s ease;
+    }
+
+    .product-card.card-revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .product-card.card-revealed:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.12);
+    }
+
+    .product-name {
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .product-card:hover .product-name {
+      color: #000;
+    }
 
     /* =========================================================
        SECTION 2: COLLECTIONS SECTION ("Quatre paires, un style")
@@ -2106,7 +2207,7 @@
     </header>
 
     <!-- Header Titles Row -->
-    <div class="collection-header-row" style="flex-wrap:wrap;gap:12px;">
+    <div class="collection-header-row reveal-elem" style="flex-wrap:wrap;gap:12px;">
       <div class="collection-titles">
         <span class="collection-subtitle">Notre sélection</span>
         <h2 class="collection-main-title">Quatre paires, un style</h2>
@@ -2119,7 +2220,7 @@
     </div>
 
     <!-- Category Filter Bar (Dynamically populated with count badges) -->
-    <div class="category-filter-container">
+    <div class="category-filter-container reveal-elem">
       <div class="category-filter-scroll" id="category-filter-bar">
         <!-- Injected via JavaScript -->
       </div>
@@ -2763,6 +2864,7 @@
 
       const chunkSize = 4;
       let html = '<div class="grids-container">';
+      let cardGlobalIdx = 0;
 
       for (let i = 0; i < filtered.length; i += chunkSize) {
         const chunk = filtered.slice(i, i + chunkSize);
@@ -2771,9 +2873,11 @@
           const badgeHtml = p.badge ? `<span class="product-badge badge-${p.badgeType || 'dark'}">${escapeHtml(p.badge)}</span>` : '';
           const formattedPrice = formatPrice(p.price);
           const primaryImg = (p.images && p.images.length > 0 && p.images[0]) ? p.images[0] : (p.img || 'assets/products/air-sape-rose.jpg');
+          const animDelay = (cardGlobalIdx % 4) * 80;
+          cardGlobalIdx++;
 
           html += `
-            <article class="product-card">
+            <article class="product-card" style="transition-delay: ${animDelay}ms;">
               <div class="product-image-box" onclick="openQuickView('${escapeHtml(p.id)}')">
                 ${badgeHtml}
                 <img src="${escapeHtml(primaryImg)}" alt="${escapeHtml(p.name)}" loading="lazy">
@@ -2803,6 +2907,39 @@
 
       html += '</div>';
       container.innerHTML = html;
+
+      // Trigger high-performance scroll reveal observer
+      setupScrollObserver();
+    }
+
+    /* ---------------- HIGH-PERFORMANCE SCROLL OBSERVER ---------------- */
+    function setupScrollObserver() {
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.reveal-elem, .product-card').forEach(el => {
+          el.classList.add('is-visible', 'card-revealed');
+        });
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (entry.target.classList.contains('product-card')) {
+              entry.target.classList.add('card-revealed');
+            } else {
+              entry.target.classList.add('is-visible');
+            }
+            obs.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.08,
+        rootMargin: '0px 0px -30px 0px'
+      });
+
+      document.querySelectorAll('.reveal-elem:not(.is-visible), .product-card:not(.card-revealed)').forEach(el => {
+        observer.observe(el);
+      });
     }
 
     /* ---------------- QUICK VIEW & WHATSAPP MODAL ---------------- */
