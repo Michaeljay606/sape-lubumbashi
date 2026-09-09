@@ -1,16 +1,21 @@
-﻿{
-  "name": "sape-lubumbashi",
-  "version": "1.0.0",
-  "description": "Boutique en ligne SAPE Lubumbashi - Chaussures Premium",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "keywords": ["boutique", "chaussures", "lubumbashi", "sape"],
-  "author": "SAPE Lubumbashi",
-  "license": "ISC"
+{
+    "name":  "sape-lubumbashi",
+    "version":  "1.0.0",
+    "description":  "Boutique en ligne SAPE Lubumbashi - Chaussures Premium",
+    "main":  "server.js",
+    "scripts":  {
+                    "start":  "node server.js",
+                    "dev":  "node server.js"
+                },
+    "engines":  {
+                    "node":  "\u003e=18.0.0"
+                },
+    "keywords":  [
+                     "boutique",
+                     "chaussures",
+                     "lubumbashi",
+                     "sape"
+                 ],
+    "author":  "SAPE Lubumbashi",
+    "license":  "ISC"
 }

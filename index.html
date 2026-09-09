@@ -1118,9 +1118,9 @@
 
 
     /* =========================================================
-       RESPONSIVE ADAPTATION (MOBILE & TABLET)
+       RESPONSIVE ADAPTATION (MOBILE & TABLET <= 768px)
        ========================================================= */
-    @media (max-width: 768px), (max-aspect-ratio: 1/1) {
+    @media (max-width: 768px) {
       .floating-cart-trigger {
         top: 16px;
         right: 16px;
@@ -2003,7 +2003,7 @@
       <canvas id="animation-canvas"></canvas>
 
       <!-- Mobile Premium Hero Image -->
-      <img id="mobile-hero-image" src="SHOE%20BOUTIQUE%20MOBILE%20ANIMATION%20SCROLL/image%20mobile.jpg" alt="SAPÉ Sneaker Mobile">
+      <img id="mobile-hero-image" src="frames-mobile/image-mobile.jpg" alt="SAPÉ Sneaker Mobile">
 
       <!-- Ambient Contrast Vignette -->
       <div class="viewport-overlay" id="viewport-overlay"></div>
@@ -3611,10 +3611,8 @@
     /* ---------------- HIGH-PERFORMANCE 360 CANVAS ENGINE ---------------- */
     (function () {
       const TOTAL_FRAMES = 240;
-      const PC_DIR = 'SHOE BOUTIQUE PC ANIMATION SCROLL';
-      const MOBILE_DIR = 'SHOE BOUTIQUE MOBILE ANIMATION SCROLL';
-
       const canvas = document.getElementById('animation-canvas');
+      if (!canvas) return;
       const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
       const heroWrapper = document.getElementById('hero-wrapper');
       const heroSection = document.getElementById('hero-section');
@@ -3622,27 +3620,23 @@
       const viewportOverlay = document.getElementById('viewport-overlay');
 
       const imagesPC = new Array(TOTAL_FRAMES);
-      const imagesMobile = new Array(TOTAL_FRAMES);
-      let currentMode = null;
 
       let targetProgress = 0;
       let currentProgress = 0;
       let lastRenderedIndex = -1;
 
       function isMobile() {
-        return window.innerWidth <= 768 || window.innerWidth < window.innerHeight;
+        return window.innerWidth <= 768;
       }
 
-      function getFrameUrl(mode, index) {
+      function getFrameUrl(index) {
         const frameNumber = String(index + 1).padStart(3, '0');
-        const folder = mode === 'mobile' ? MOBILE_DIR : PC_DIR;
-        return `${encodeURIComponent(folder)}/ezgif-frame-${frameNumber}.jpg`;
+        return `frames-pc/ezgif-frame-${frameNumber}.jpg`;
       }
 
       function resizeCanvas() {
-        // Optimal mobile DPR clamp for smooth 60/120fps
-        const maxDpr = isMobile() ? 1.25 : 1.75;
-        const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
+        if (!canvas) return;
+        const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
         canvas.width = Math.round(window.innerWidth * dpr);
         canvas.height = Math.round(window.innerHeight * dpr);
         ctx.imageSmoothingEnabled = true;
@@ -3651,6 +3645,7 @@
       }
 
       function updateScrollProgress() {
+        if (!heroWrapper) return;
         const wrapperHeight = heroWrapper.offsetHeight - window.innerHeight;
         if (wrapperHeight <= 0) {
           targetProgress = 0;
@@ -3660,18 +3655,18 @@
         targetProgress = Math.min(Math.max(scrollY / wrapperHeight, 0), 1);
       }
 
-      function getBestAvailableFrame(images, targetIndex) {
-        if (images[targetIndex] && images[targetIndex].complete && images[targetIndex].naturalWidth > 0) {
-          return images[targetIndex];
+      function getBestAvailableFrame(targetIndex) {
+        if (imagesPC[targetIndex] && imagesPC[targetIndex].complete && imagesPC[targetIndex].naturalWidth > 0) {
+          return imagesPC[targetIndex];
         }
         let left = targetIndex - 1;
         let right = targetIndex + 1;
         while (left >= 0 || right < TOTAL_FRAMES) {
-          if (left >= 0 && images[left] && images[left].complete && images[left].naturalWidth > 0) {
-            return images[left];
+          if (left >= 0 && imagesPC[left] && imagesPC[left].complete && imagesPC[left].naturalWidth > 0) {
+            return imagesPC[left];
           }
-          if (right < TOTAL_FRAMES && images[right] && images[right].complete && images[right].naturalWidth > 0) {
-            return images[right];
+          if (right < TOTAL_FRAMES && imagesPC[right] && imagesPC[right].complete && imagesPC[right].naturalWidth > 0) {
+            return imagesPC[right];
           }
           left--;
           right++;
@@ -3681,9 +3676,9 @@
 
       function renderFrame(frameIndex, force = false) {
         if (frameIndex === lastRenderedIndex && !force) return;
+        if (isMobile()) return;
 
-        const images = currentMode === 'mobile' ? imagesMobile : imagesPC;
-        const img = getBestAvailableFrame(images, frameIndex);
+        const img = getBestAvailableFrame(frameIndex);
         if (!img) return;
 
         lastRenderedIndex = frameIndex;
@@ -3702,50 +3697,42 @@
         ctx.drawImage(img, dx, dy, dw, dh);
       }
 
-      // High-performance batched image preloading to prevent network / decoder freeze on mobile
-      function preloadSequenceBatched(mode) {
-        const images = mode === 'mobile' ? imagesMobile : imagesPC;
+      function preloadAllFrames() {
+        if (isMobile()) return;
 
-        // Step 1: Load First Frame Immediately
-        if (!images[0]) {
+        // 1. First frame immediately
+        if (!imagesPC[0]) {
           const firstImg = new Image();
-          firstImg.src = getFrameUrl(mode, 0);
+          firstImg.src = getFrameUrl(0);
           firstImg.onload = () => {
-            if (currentMode === mode && lastRenderedIndex === -1) {
-              renderFrame(0, true);
-            }
+            renderFrame(0, true);
           };
-          images[0] = firstImg;
+          imagesPC[0] = firstImg;
         }
 
-        // Step 2: Load Keyframes across the rotation in batches of 4
+        // 2. Load all frames in interleaved batches
         const order = [];
-        // First pass: every 4th frame (60 keyframes) for instant scrubbing coverage
-        for (let i = 0; i < TOTAL_FRAMES; i += 4) {
-          if (i !== 0) order.push(i);
-        }
-        // Second pass: every 2nd frame
-        for (let i = 2; i < TOTAL_FRAMES; i += 4) {
-          order.push(i);
-        }
-        // Third pass: all remaining frames
-        for (let i = 1; i < TOTAL_FRAMES; i += 2) {
-          order.push(i);
-        }
+        for (let i = 0; i < TOTAL_FRAMES; i += 4) { if (i !== 0) order.push(i); }
+        for (let i = 2; i < TOTAL_FRAMES; i += 4) { order.push(i); }
+        for (let i = 1; i < TOTAL_FRAMES; i += 2) { order.push(i); }
 
         let queueIdx = 0;
-        const CONCURRENCY = isMobile() ? 4 : 8;
+        const CONCURRENCY = 8;
 
         function loadNext() {
           if (queueIdx >= order.length) return;
           const idx = order[queueIdx++];
-          if (!images[idx]) {
+          if (!imagesPC[idx]) {
             const img = new Image();
-            img.src = getFrameUrl(mode, idx);
-            img.onload = img.onerror = () => {
+            img.src = getFrameUrl(idx);
+            img.onload = () => {
+              if (lastRenderedIndex === -1) renderFrame(0, true);
               loadNext();
             };
-            images[idx] = img;
+            img.onerror = () => {
+              loadNext();
+            };
+            imagesPC[idx] = img;
           } else {
             loadNext();
           }
@@ -3756,21 +3743,8 @@
         }
       }
 
-      function switchModeIfNeeded() {
-        const newMode = isMobile() ? 'mobile' : 'pc';
-        if (newMode !== currentMode) {
-          currentMode = newMode;
-          if (currentMode === 'pc') {
-            preloadSequenceBatched('pc');
-            lastRenderedIndex = -1;
-            renderFrame(Math.round(currentProgress * (TOTAL_FRAMES - 1)), true);
-            requestAnimationFrame(animationLoop);
-          }
-        }
-      }
-
       function updateHeroFade(progress) {
-        if (isMobile()) return;
+        if (isMobile() || !heroSection) return;
         const fadeThreshold = 0.30;
         const heroOpacity = Math.max(0, 1 - (progress / fadeThreshold));
         const heroTranslateY = -progress * 40;
@@ -3789,47 +3763,39 @@
       }
 
       function animationLoop() {
-        if (isMobile()) return;
-        const lerpFactor = 0.18;
-        const diff = targetProgress - currentProgress;
+        if (!isMobile()) {
+          const lerpFactor = 0.18;
+          const diff = targetProgress - currentProgress;
 
-        if (Math.abs(diff) > 0.0005) {
-          currentProgress += diff * lerpFactor;
-        } else {
-          currentProgress = targetProgress;
+          if (Math.abs(diff) > 0.0005) {
+            currentProgress += diff * lerpFactor;
+          } else {
+            currentProgress = targetProgress;
+          }
+
+          const frameIndex = Math.min(
+            Math.max(Math.round(currentProgress * (TOTAL_FRAMES - 1)), 0),
+            TOTAL_FRAMES - 1
+          );
+
+          renderFrame(frameIndex);
+          updateHeroFade(currentProgress);
         }
-
-        const frameIndex = Math.min(
-          Math.max(Math.round(currentProgress * (TOTAL_FRAMES - 1)), 0),
-          TOTAL_FRAMES - 1
-        );
-
-        renderFrame(frameIndex);
-        updateHeroFade(currentProgress);
 
         requestAnimationFrame(animationLoop);
       }
 
-      // Passive scroll listeners for 120Hz/60Hz zero-lag touch tracking
       window.addEventListener('scroll', updateScrollProgress, { passive: true });
-      window.addEventListener('touchmove', updateScrollProgress, { passive: true });
       window.addEventListener('resize', () => {
-        switchModeIfNeeded();
         resizeCanvas();
         updateScrollProgress();
-      }, { passive: true });
-      window.addEventListener('orientationchange', () => {
-        setTimeout(() => {
-          switchModeIfNeeded();
-          resizeCanvas();
-          updateScrollProgress();
-        }, 80);
+        if (!isMobile()) preloadAllFrames();
       }, { passive: true });
 
-      switchModeIfNeeded();
       resizeCanvas();
       updateScrollProgress();
       currentProgress = targetProgress;
+      preloadAllFrames();
       requestAnimationFrame(animationLoop);
     })();
   </script>
