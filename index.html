@@ -105,7 +105,7 @@
        ========================================================= */
     .hero-sticky-wrapper {
       position: relative;
-      height: 230vh; /* Perfectly calibrated travel distance for buttery smooth 360 scrub */
+      height: 160vh; /* Distance de transition raccourcie à 160vh pour un accès direct en 1 coup de molette */
       width: 100%;
     }
 
@@ -3713,20 +3713,21 @@
 
       function updateHeroFade(progress) {
         if (isMobile() || !heroSection) return;
-        const fadeThreshold = 0.35;
+        // Disparition rapide du texte dès le début du scroll
+        const fadeThreshold = 0.18;
         const heroOpacity = Math.max(0, 1 - (progress / fadeThreshold));
-        const heroTranslateY = -progress * 50;
+        const heroTranslateY = -progress * 60;
 
         heroSection.style.opacity = heroOpacity.toFixed(3);
         heroSection.style.transform = `translateY(${heroTranslateY.toFixed(1)}px)`;
-        heroSection.style.pointerEvents = heroOpacity > 0.08 ? 'auto' : 'none';
+        heroSection.style.pointerEvents = heroOpacity > 0.05 ? 'auto' : 'none';
 
         if (scrollHint) {
-          scrollHint.style.opacity = Math.max(0, 1 - (progress / 0.12)).toFixed(2);
+          scrollHint.style.opacity = Math.max(0, 1 - (progress / 0.08)).toFixed(2);
         }
 
         if (viewportOverlay) {
-          viewportOverlay.style.opacity = (0.2 + 0.8 * heroOpacity).toFixed(2);
+          viewportOverlay.style.opacity = (0.15 + 0.85 * heroOpacity).toFixed(2);
         }
       }
 
