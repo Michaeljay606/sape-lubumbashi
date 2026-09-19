@@ -2872,7 +2872,11 @@
         chunk.forEach(p => {
           const badgeHtml = p.badge ? `<span class="product-badge badge-${p.badgeType || 'dark'}">${escapeHtml(p.badge)}</span>` : '';
           const formattedPrice = formatPrice(p.price);
-          const primaryImg = (p.images && p.images.length > 0 && p.images[0]) ? p.images[0] : (p.img || 'assets/products/air-sape-rose.jpg');
+          // Prefer first real http/https URL from images array, fall back to local asset, never use raw base64 as src
+          const allCandidates = [...(p.images || []), p.img].filter(Boolean);
+          const primaryImg = allCandidates.find(u => u.startsWith('http://') || u.startsWith('https://'))
+            || allCandidates.find(u => u.startsWith('assets/'))
+            || 'assets/products/air-sape-rose.jpg';
           const animDelay = (cardGlobalIdx % 4) * 80;
           cardGlobalIdx++;
 
@@ -2957,13 +2961,37 @@
       activeQuickViewSize = 42;
       activeQuickViewQty = 1;
 
-      // Ensure 3 images array
-      if (Array.isArray(p.images) && p.images.length > 0) {
-        activeQuickViewImages = p.images.filter(img => Boolean(img));
-        if (activeQuickViewImages.length === 0) activeQuickViewImages = [p.img || 'assets/products/air-sape-rose.jpg'];
-      } else {
-        activeQuickViewImages = [p.img || 'assets/products/air-sape-rose.jpg'];
+      // Build image gallery: prefer real Supabase/http URLs, exclude local assets/ fallbacks and giant base64
+      const isRealUrl = img => img && (img.startsWith('http://') || img.startsWith('https://'));
+      const isLocalAsset = img => img && img.startsWith('assets/');
+      const isBase64 = img => img && img.startsWith('data:image');
+
+      let rawImages = Array.isArray(p.images) ? p.images : [];
+      const hasRealUrl = rawImages.some(isRealUrl);
+
+      // Filter: keep only real URLs if any exist, else keep local assets (no base64 in gallery)
+      let filteredImgs = rawImages.filter(img => {
+        if (!img) return false;
+        if (isBase64(img)) return false;                    // never show giant base64 in gallery
+        if (hasRealUrl && isLocalAsset(img)) return false;  // drop local assets when real URL exists
+        return true;
+      });
+
+      // Deduplicate
+      filteredImgs = [...new Set(filteredImgs)];
+
+      // Fallback: if nothing valid, use p.img (unless base64), then hard fallback
+      if (filteredImgs.length === 0) {
+        if (p.img && isRealUrl(p.img)) {
+          filteredImgs = [p.img];
+        } else if (p.img && isLocalAsset(p.img)) {
+          filteredImgs = [p.img];
+        } else {
+          filteredImgs = ['assets/products/air-sape-rose.jpg'];
+        }
       }
+
+      activeQuickViewImages = filteredImgs;
 
       // Fill modal details
       const titleEl = document.getElementById('qv-title');
